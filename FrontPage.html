@@ -1,0 +1,2762 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EchoWhisper - Your Voice Has a Friend</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Space Mono for a cyberpunk feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Bolt.new Badge Configuration -->
+    <style>
+        .bolt-badge {
+            transition: all 0.3s ease;
+        }
+        @keyframes badgeIntro {
+            0% { transform: rotateY(-90deg); opacity: 0; }
+            100% { transform: rotateY(0deg); opacity: 1; }
+        }
+        .bolt-badge-intro {
+            animation: badgeIntro 0.8s ease-out 1s both;
+        }
+        .bolt-badge-intro.animated {
+            animation: none;
+        }
+        @keyframes badgeHover {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(22deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .bolt-badge:hover {
+            animation: badgeHover 0.6s ease-in-out;
+        }
+    </style>
+    
+    <style>
+        /* Custom colors as CSS variables for easier use */
+        :root {
+            --funkyBlue: #00e5ff;
+            /* Electric Blue */
+            --funkyPurple: #8A2BE2;
+            /* Synth Purple */
+            --funkyPink: #FF00FF;
+            /* Neon Pink */
+            --funkyOrange: #FFA500;
+            /* Bright Orange */
+            --funkyGreen: #00FF00;
+            /* Cyber Green */
+            --funkyMint: #4ecdc4;
+            --funkyCoral: #ff7675;
+            --funkyYellow: #ffd23f;
+        }
+
+        /* Global CSS for Nothing Design Feel - Applied to overall body/structure */
+        body {
+            font-family: 'Space Mono', monospace;
+            background-color: #0d0d0d;
+            /* Dark background */
+            color: #f0f0f0;
+            /* Brighter white for general text */
+            overflow-x: hidden;
+            /* Prevent horizontal scroll */
+        }
+
+        /* Nav - Keep subtle glassmorphism for "Nothing Design" website feel */
+        .glass-effect-nav {
+            backdrop-filter: blur(5px) saturate(120%);
+            -webkit-backdrop-filter: blur(5px) saturate(120%);
+            background-color: rgba(255, 255, 255, 0.03);
+            /* Very low opacity */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            /* Almost invisible border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Very subtle shadow */
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-effect-nav:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Text shadow for logo text - Reverted to stronger cyberpunk glow */
+        .logo-text-shadow {
+            text-shadow: 0px 0px 15px #fff,
+                0px 0px 30px var(--funkyBlue),
+                0px 0px 45px var(--funkyPink);
+        }
+
+        /* Scroll Fade-In/Out Animation Styles */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Apply Space Mono font to specific text elements */
+        .font-space-mono {
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Chat bubble styles - Reverted to more defined cyberpunk style */
+        .ai-message-bubble {
+            background-color: rgba(255, 255, 255, 0.25);
+            /* Increased opacity for AI */
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem 0.75rem 0.75rem 0.25rem;
+            max-width: 80%;
+            align-self: flex-start;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .user-message-bubble {
+            background-color: rgba(0, 229, 255, 0.7);
+            /* Increased opacity for user */
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem 0.75rem 0.25rem 0.75rem;
+            max-width: 80%;
+            align-self: flex-end;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* AI Interaction Section - Reverted to prominent neon border/shadow */
+        #ai-interaction-section {
+            border: 2px solid var(--funkyBlue);
+            /* Bright cyan/blue neon border */
+            box-shadow: 0 0 15px var(--funkyBlue),
+                0 0 30px rgba(0, 240, 255, 0.7),
+                /* Increased shadow opacity */
+                0 0 45px rgba(0, 240, 255, 0.5);
+            /* Increased shadow opacity */
+            background-color: rgba(13, 13, 13, 0.8);
+            /* More prominent background for the whole section */
+            transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Style for the chat messages container itself */
+        #chat-messages-container {
+            background-color: rgba(31, 41, 55, 0.7);
+            /* Increased opacity for message box background */
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            /* Retained border strength */
+            box-shadow: inset 0 0 8px rgba(0, 229, 255, 0.2);
+            /* Slightly stronger inner glow */
+        }
+
+
+        /* Feature Cards, How It Works, Testimonials, Privacy Cards - Reverted to original background and hover */
+        .feature-card,
+        #privacy-section>div>div>div>div {
+            background-color: rgba(31, 41, 55, 0.7);
+            /* Increased opacity for card background */
+            border: 1px solid rgba(75, 85, 99, 0.7);
+            /* Increased border strength */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+            /* More visible shadow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .feature-card:hover,
+        #privacy-section>div>div>div>div:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4), 0 0 20px var(--funkyBlue)50;
+            /* Stronger hover shadow/glow */
+            border-color: var(--funkyBlue);
+            /* Hover border color */
+        }
+
+        /* Specific for inner gradient div on feature cards */
+        .feature-card .absolute.inset-0 {
+            opacity: 0.3;
+            /* Default opacity for inner gradient */
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover .absolute.inset-0 {
+            opacity: 0.5;
+            /* Increased on hover */
+        }
+
+
+        /* Custom Tailwind Colors applied via direct CSS for more control */
+        .bg-funky-blue {
+            background-color: var(--funkyBlue);
+        }
+
+        .text-funky-blue {
+            color: var(--funkyBlue);
+        }
+
+        .from-funky-blue {
+            --tw-gradient-from: var(--funkyBlue) var(--tw-gradient-from-position);
+            --tw-gradient-to: var(--funkyBlue)00 var(--tw-gradient-to-position);
+        }
+
+        .to-funky-blue {
+            --tw-gradient-to: var(--funkyBlue) var(--tw-gradient-to-position);
+        }
+
+        .border-funky-blue {
+            border-color: var(--funkyBlue);
+        }
+
+        .bg-funky-purple {
+            background-color: var(--funkyPurple);
+        }
+
+        .text-funky-purple {
+            color: var(--funkyPurple);
+        }
+
+        .from-funky-purple {
+            --tw-gradient-from: var(--funkyPurple) var(--tw-gradient-from-position);
+            --tw-gradient-to: var(--funkyPurple)00 var(--tw-gradient-to-position);
+        }
+
+        .to-funky-purple {
+            --tw-gradient-to: var(--funkyPurple) var(--tw-gradient-to-position);
+        }
+
+        .bg-funky-pink {
+            background-color: var(--funkyPink);
+        }
+
+        .text-funky-pink {
+            color: var(--funkyPink);
+        }
+
+        .from-funky-pink {
+            --tw-gradient-from: var(--funkyPink) var(--tw-gradient-from-position);
+            --tw-gradient-to: var(--funkyPink)00 var(--tw-gradient-to-position);
+        }
+
+        .to-funky-pink {
+            --tw-gradient-to: var(--funkyPink) var(--tw-gradient-to-position);
+        }
+
+        .bg-funky-orange {
+            background-color: var(--funkyOrange);
+        }
+
+        .text-funky-orange {
+            color: var(--funkyOrange);
+        }
+
+        .from-funky-orange {
+            --tw-gradient-from: var(--funkyOrange) var(--tw-gradient-from-position);
+            --tw-gradient-to: var(--funkyOrange)00 var(--tw-gradient-to-position);
+        }
+
+        .to-funky-orange {
+            --tw-gradient-to: var(--funkyOrange) var(--tw-gradient-to-position);
+        }
+
+        .bg-funky-green {
+            background-color: var(--funkyGreen);
+        }
+
+        .text-funky-green {
+            color: var(--funkyGreen);
+        }
+
+        .from-funky-green {
+            --tw-gradient-from: var(--funkyGreen) var(--tw-gradient-from-position);
+            --tw-gradient-to: var(--funkyGreen)00 var(--tw-gradient-to-position);
+        }
+
+        .to-funky-green {
+            --tw-gradient-to: var(--funkyGreen) var(--tw-gradient-to-position);
+        }
+
+        .bg-funky-mint {
+            background-color: var(--funkyMint);
+        }
+
+        .text-funky-mint {
+            color: var(--funkyMint);
+        }
+
+        .from-funky-mint {
+            --tw-gradient-from: var(--funkyMint) var(--tw-gradient-from-position);
+            --tw-gradient-to: var(--funkyMint)00 var(--tw-gradient-to-position);
+        }
+
+        .to-funky-mint {
+            --tw-gradient-to: var(--funkyMint) var(--tw-gradient-to-position);
+        }
+
+        .bg-funky-coral {
+            background-color: var(--funkyCoral);
+        }
+
+        .text-funky-coral {
+            color: var(--funkyCoral);
+        }
+
+        .from-funky-coral {
+            --tw-gradient-from: var(--funkyCoral) var(--tw-gradient-from-position);
+            --tw-gradient-to: var(--funkyCoral)00 var(--tw-gradient-to-position);
+        }
+
+        .to-funky-coral {
+            --tw-gradient-to: var(--funkyCoral) var(--tw-gradient-to-position);
+        }
+
+        .bg-funky-yellow {
+            background-color: var(--funkyYellow);
+        }
+
+        .text-funky-yellow {
+            color: var(--funkyYellow);
+        }
+
+        .from-funky-yellow {
+            --tw-gradient-from: var(--funkyYellow);
+            --tw-gradient-to: var(--funkyYellow);
+        }
+
+        .to-funky-yellow {
+            --tw-gradient-to: var(--funkyYellow);
+        }
+
+
+        /* Hero Text Shadow Pulse on Hover - softer, more subtle */
+        .hover\:text-shadow-pulse:hover {
+            text-shadow: 0px 0px 10px var(--funkyPink), 0px 0px 20px var(--funkyBlue);
+        }
+
+        /* "Unlock Your Voice" button shine effect */
+        .shine-button {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .shine-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 100%);
+            transform: skewX(-20deg);
+            transition: left 0.5s ease-in-out;
+            z-index: -1;
+        }
+
+        .shine-button:hover::before {
+            left: 125%;
+        }
+
+        /* "Get Started for Free" button pulse grow effect */
+        .pulse-grow-button:hover {
+            animation: pulse-grow 0.8s ease-out forwards;
+        }
+
+        @keyframes pulse-grow {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+            }
+
+            50% {
+                transform: scale(1.03);
+                box-shadow: 0 0 25px rgba(0, 229, 255, 0.7), 0 0 40px rgba(138, 43, 226, 0.7);
+            }
+
+            100% {
+                transform: scale(1.02);
+                box-shadow: 0 0 20px rgba(0, 229, 255, 0.5), 0 0 30px rgba(138, 43, 226, 0.5);
+            }
+        }
+
+        /* "Watch Demo" button underline animation */
+        .underline-animation {
+            position: relative;
+            text-decoration: none;
+            /* Remove default underline */
+        }
+
+        .underline-animation::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            bottom: -4px;
+            /* Position below text */
+            left: 0;
+            background-color: var(--funkyPurple);
+            /* Color of the underline */
+            transition: width 0.3s ease-out;
+        }
+
+        .underline-animation:hover::after {
+            width: 100%;
+        }
+
+        /* Site Opening Animation Overlay Styles */
+        #site-opening-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background-color: #000;
+            /* Solid black background */
+            display: flex;
+            flex-direction: column;
+            /* Arrange content vertically */
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            opacity: 1;
+            transition: opacity 0.7s ease-out;
+            /* Fade out transition */
+        }
+
+        #site-opening-overlay.is-active {
+            opacity: 0;
+            pointer-events: none;
+            /* Disable interactions after fade out */
+        }
+
+        /* Overlay Logo (ECHOWHISPER text) */
+        #overlay-logo {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.7),
+                /* White glow */
+                0px 0px 20px var(--funkyBlue),
+                0px 0px 30px var(--funkyPink);
+            opacity: 0;
+            /* Starts hidden for fade-in */
+            transform: scale(0.9);
+            /* Starts slightly scaled down */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            margin-bottom: 20px;
+            /* Space between logo and loading text */
+        }
+
+        #overlay-logo.is-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Loading Dots Text */
+        #loading-dots-text {
+            font-size: 1.5rem;
+            color: var(--funkyMint);
+            /* Cyber Green color for loading text */
+            opacity: 0;
+            /* Starts hidden for fade-in */
+            transition: opacity 0.5s ease-out;
+        }
+
+        #loading-dots-text.is-visible {
+            opacity: 1;
+        }
+
+        /* Twinkling Stars Background */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            opacity: 0;
+            /* Initially hidden */
+            transition: opacity 1s ease-in-out;
+            pointer-events: none;
+        }
+
+        .stars.is-visible {
+            opacity: 1;
+        }
+
+        /* Using multiple box-shadows for stars, then animating opacity for twinkle */
+        .stars::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 1px;
+            background: transparent;
+            box-shadow:
+                /* Small stars */
+                10px 20px white, 50px 80px white, 120px 40px white, 180px 100px white, 250px 20px white, 300px 90px white, 380px 50px white, 450px 10px white, 520px 70px white, 600px 30px white,
+                70px 150px white, 140px 200px white, 210px 120px white, 280px 180px white, 350px 110px white, 420px 170px white, 490px 80px white, 560px 140px white, 630px 60px white, 700px 190px white,
+                50px 300px white, 120px 350px white, 190px 280px white, 260px 330px white, 330px 260px white, 400px 310px white, 470px 240px white, 540px 290px white, 610px 220px white, 680px 270px white,
+                750px 320px white, 820px 250px white, 890px 300px white, 960px 230px white, 1030px 280px white, 1100px 210px white, 1170px 260px white, 1240px 190px white, 1310px 240px white, 1380px 170px white,
+                /* Larger stars */
+                30px 100px #ffeebb, 100px 250px #ffddcc, 200px 70px #ccffcc, 320px 150px #cceeff, 400px 230px #ffeeff, 500px 300px #ccffcc, 650px 10px #ffeebb, 750px 200px #cceeff,
+                900px 50px #ffddcc, 1050px 120px #ccffcc, 1200px 280px #ffeebb, 1350px 80px #ffddcc, 1450px 160px #cceeff;
+            animation: twinkle 4s infinite ease-in-out alternate;
+        }
+
+        /* Offset for more stars (if needed) - can repeat and offset the shadow points for denser effect */
+        .stars::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 1px;
+            background: transparent;
+            box-shadow:
+                /* Small stars offset */
+                5px 60px white, 80px 10px white, 150px 90px white, 220px 30px white, 290px 110px white, 360px 50px white, 430px 130px white, 500px 70px white, 570px 150px white, 640px 90px white,
+                10px 220px white, 90px 280px white, 160px 210px white, 230px 270px white, 300px 200px white, 370px 260px white, 440px 190px white, 510px 250px white, 580px 180px white, 650px 240px white;
+            animation: twinkle 4s infinite ease-in-out alternate-reverse;
+            /* Reverse for varied twinkle */
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 0.2;
+            }
+        }
+
+        /* New Section - Talk to Echo AI (Modified from Gemma) */
+        .echo-card {
+            position: relative;
+            /* Needed for absolute positioning of echo-stars-background */
+            overflow: hidden;
+            /* Ensures stars don't overflow the card */
+            border: 2px solid var(--funkyOrange);
+            /* Orange border */
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.6), 0 0 40px rgba(255, 165, 0, 0.3);
+            /* Stronger orange glow */
+            background-color: #1a1a1a;
+            /* Darker background for contrast */
+        }
+
+        .echo-status-box {
+            border: 1px solid rgba(255, 165, 0, 0.4);
+            /* Lighter orange border */
+            background-color: #0d0d0d;
+            /* Even darker for status */
+            box-shadow: inset 0 0 8px rgba(255, 165, 0, 0.15);
+        }
+
+        .echo-features-box {
+            border: 1px solid var(--funkyYellow);
+            background-color: rgba(255, 210, 63, 0.1);
+            /* Subtle yellow background */
+            box-shadow: 0 0 10px rgba(255, 210, 63, 0.3);
+            /* Yellow glow */
+        }
+
+        .start-talking-button {
+            background: linear-gradient(to right, var(--funkyOrange), var(--funkyYellow));
+            /* Orange to yellow gradient */
+            color: black;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.6);
+            /* Strong orange glow */
+            transition: all 0.3s ease-in-out;
+        }
+
+        .start-talking-button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 25px rgba(255, 165, 0, 0.8), 0 0 40px rgba(255, 165, 0, 0.5);
+        }
+
+        /* Twinkling Stars Background for Echo AI section */
+        .echo-stars-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            pointer-events: none;
+            /* Allows clicks to pass through */
+            z-index: 0;
+            /* Ensures stars are behind content */
+        }
+
+        /* Base styles for pseudo-elements */
+        .echo-stars-background::before,
+        .echo-stars-background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 1px;
+            background: transparent;
+            /* Ensure the box-shadow content starts within the visible area */
+            transform-origin: 0 0;
+        }
+
+        .echo-stars-background::before {
+            box-shadow:
+                /* Small stars - varied white/yellow tones for subtle variety */
+                10px 20px #f0f0f0, 50px 80px #f8f8f8, 120px 40px #e0e0e0, 180px 100px #f5f5f5, 250px 20px #f0f0f0, 300px 90px #f8f8f8, 380px 50px #e0e0e0, 450px 10px #f5f5f5, 520px 70px #f0f0f0, 600px 30px #f8f8f8,
+                70px 150px #e0e0e0, 140px 200px #f5f5f5, 210px 120px #f0f0f0, 280px 180px #f8f8f8, 350px 110px #e0e0e0, 420px 170px #f5f5f5, 490px 80px #f0f0f0, 560px 140px #f8f8f8, 630px 60px #e0e0e0, 700px 190px #f5f5f5,
+                50px 300px #f0f0f0, 120px 350px #f8f8f8, 190px 280px #e0e0e0, 260px 330px #f5f5f5, 330px 260px #f0f0f0, 400px 310px #f8f8f8, 470px 240px #e0e0e0, 540px 290px #f5f5f5, 610px 220px #f0f0f0, 680px 270px #f8f8f8,
+                750px 320px #e0e0e0, 820px 250px #f5f5f5, 890px 300px #f0f0f0, 960px 230px #f8f8f8, 1030px 280px #e0e0e0, 1100px 210px #f5f5f5, 1170px 260px #f0f0f0, 1240px 190px #f8f8f8, 1310px 240px #e0e0e0, 1380px 170px #f5f5f5,
+                /* Larger stars - slightly yellow/orange tint */
+                30px 100px #ffeebb, 100px 250px #ffddcc, 200px 70px #ffe0b2, 320px 150px #fff5e0, 400px 230px #ffeebb, 500px 300px #ffddcc, 650px 10px #ffe0b2, 750px 200px #fff5e0,
+                900px 50px #ffeebb, 1050px 120px #ffddcc, 1200px 280px #ffe0b2, 1350px 80px #fff5e0, 1450px 160px #ffeebb;
+            animation: twinkle-echo 5s infinite ease-in-out alternate, move-stars-layer1 60s linear infinite;
+            /* Combined animations */
+        }
+
+        .echo-stars-background::after {
+            box-shadow:
+                /* Small stars offset */
+                5px 60px #f0f0f0, 80px 10px #e0e0e0, 150px 90px #f5f5f5, 220px 30px #f8f8f8, 290px 110px #f0f0f0, 360px 50px #e0e0e0, 430px 130px #f5f5f5, 500px 70px #f8f8f8, 570px 150px #f0f0f0, 640px 90px #e0e0e0,
+                10px 220px white, 90px 280px white, 160px 210px white, 230px 270px white, 300px 200px white, 370px 260px white, 440px 190px white, 510px 250px white, 580px 180px white, 650px 240px white;
+            animation: twinkle-echo 5s infinite ease-in-out alternate-reverse, move-stars-layer2 80s linear infinite;
+            /* Combined animations */
+        }
+
+        @keyframes twinkle-echo {
+
+            0%,
+            100% {
+                opacity: 0.7;
+            }
+
+            /* Higher default opacity */
+            50% {
+                opacity: 0.1;
+            }
+
+            /* Lower opacity at half-cycle */
+        }
+
+        /* New keyframes for subtle star movement */
+        @keyframes move-stars-layer1 {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(20px, 15px);
+            }
+
+            /* Subtle diagonal drift */
+        }
+
+        @keyframes move-stars-layer2 {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(-15px, 25px);
+            }
+
+            /* Subtle diagonal drift in another direction */
+        }
+
+        /* Comment Section container to match image styles */
+        .user-comments-section-wrapper {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--funkyPink);
+            /* Pink neon border for this section */
+            box-shadow: 0 0 15px var(--funkyPink),
+                0 0 30px rgba(255, 0, 255, 0.7),
+                0 0 45px rgba(255, 0, 255, 0.5);
+            background-color: rgba(13, 13, 13, 0.8);
+            transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Comment card basic styling - now with more specific sizing for horizontal scroll */
+        .comment-card {
+            background-color: #1A1A1A;
+            /* Solid dark background */
+            border-radius: 1rem;
+            /* Rounded corners */
+            padding: 1.5rem;
+            /* Padding inside the card */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            /* Stronger shadow */
+            transition: all 0.3s ease, box-shadow 0.3s ease;
+            /* Smooth transition for hover effects */
+            position: relative;
+            /* For dynamic border glow */
+            overflow: hidden;
+            /* Ensure content stays within borders */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            /* Subtle light border */
+            flex-shrink: 0;
+            /* Prevent cards from shrinking */
+            opacity: 0.7;
+            /* Default opacity for non-active cards */
+            transform: scale(0.95);
+            /* Slightly smaller for non-active cards */
+        }
+
+        /* Active comment card styling */
+        .comment-card.active {
+            opacity: 1;
+            /* Full opacity for active card */
+            transform: scale(1);
+            /* Full size for active card */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7), 0 0 20px var(--funkyPink);
+            /* Enhanced shadow and pink glow for active */
+            border-color: var(--funkyPink);
+            /* Vibrant pink border for active card */
+        }
+
+        /* Avatar styles */
+        .comment-avatar {
+            min-width: 3rem;
+            /* Fixed width for avatar */
+            height: 3rem;
+            /* Fixed height for avatar */
+            border-radius: 9999px;
+            /* Fully circular */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            /* Text size for initials */
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+            /* Prevent shrinking */
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            /* Subtle border around avatar */
+        }
+
+        /* Specific avatar background colors (extended for dynamic use) */
+        .bg-avatar-0 {
+            background-color: var(--funkyOrange);
+        }
+
+        .bg-avatar-1 {
+            background-color: var(--funkyGreen);
+        }
+
+        .bg-avatar-2 {
+            background-color: var(--funkyPink);
+        }
+
+        .bg-avatar-3 {
+            background-color: var(--funkyPurple);
+        }
+
+        .bg-avatar-4 {
+            background-color: var(--funkyBlue);
+        }
+
+        .bg-avatar-5 {
+            background-color: var(--funkyCoral);
+        }
+
+        .bg-avatar-6 {
+            background-color: var(--funkyMint);
+        }
+
+        .bg-avatar-7 {
+            background-color: var(--funkyYellow);
+        }
+
+
+        /* Comment author name style */
+        .comment-author-name {
+            color: #d1d5db;
+            /* Light gray for names, as per image */
+            font-size: 1.125rem;
+            /* text-lg */
+            font-weight: 600;
+            /* font-semibold */
+        }
+
+        /* Verified Review tag */
+        .verified-review-tag {
+            background-color: #34D399;
+            /* A vibrant green (tailwind's green-400) */
+            color: #1F2937;
+            /* Dark text for contrast */
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.5rem;
+            /* Rounded corners */
+            font-size: 0.75rem;
+            /* text-xs */
+            font-weight: 500;
+            /* font-medium */
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            border: 1px solid #10B981;
+            /* A slightly darker green border (tailwind's green-500) */
+        }
+
+        /* Comment text style */
+        .comment-text {
+            color: #E5E7EB;
+            /* Lighter gray for comment text (tailwind's gray-200) */
+            line-height: 1.6;
+            /* leading-relaxed */
+            margin-top: 0.75rem;
+            /* Add some space above comment text */
+        }
+
+        /* Star rating styles */
+        .star-rating {
+            color: #FBBF24;
+            /* Amber color for stars (tailwind's amber-400) */
+            font-size: 1.25rem;
+            /* Larger stars */
+            letter-spacing: 0.02em;
+            /* Slightly reduced space between stars */
+        }
+
+        /* User ID display */
+        #user-id-display {
+            font-size: 0.8rem;
+            color: var(--funkyMint);
+            margin-top: 1rem;
+            text-align: center;
+            word-break: break-all;
+            /* Allow long IDs to break lines */
+        }
+
+        /* New: Copyright Text Neon Pulse Animation */
+        .copyright-neon-pulse {
+            animation: neon-pulse 3s infinite alternate ease-in-out;
+        }
+
+        @keyframes neon-pulse {
+
+            0%,
+            100% {
+                text-shadow: 0 0 5px var(--funkyBlue),
+                    0 0 10px var(--funkyBlue),
+                    0 0 15px var(--funkyBlue),
+                    0 0 20px rgba(0, 229, 255, 0.5);
+                /* Blue glow */
+            }
+
+            50% {
+                text-shadow: 0 0 5px var(--funkyPink),
+                    0 0 10px var(--funkyPink),
+                    0 0 15px var(--funkyPink),
+                    0 0 20px rgba(255, 0, 255, 0.5);
+                /* Pink glow */
+            }
+        }
+
+        /* Comment Slider specific styles */
+        #comment-slider-container {
+            overflow: hidden;
+            /* Hide overflow */
+            width: 100%;
+            /* Ensure it takes full width */
+            position: relative;
+        }
+
+        #comment-slides-track {
+            display: flex;
+            flex-wrap: nowrap;
+            /* Keep cards in a single line */
+            padding: 1rem;
+            /* Padding for cards to not touch edges */
+            margin: 0 -1rem;
+            /* Compensate for padding to keep content centered visually */
+            transition: transform 0.5s ease-out;
+            /* Smooth transition for programmatic sliding */
+            will-change: transform;
+            /* Optimize for smooth animation */
+        }
+
+        /* Responsive adjustments for comment cards */
+        @media (max-width: 767px) {
+            .comment-card {
+                width: 90%;
+                /* Make cards wider on smaller screens */
+                margin-right: 1rem;
+                /* Adjust margin for mobile */
+            }
+
+            #comment-slides-track {
+                padding: 0.5rem;
+                /* Adjust padding for mobile */
+            }
+        }
+
+        @media (min-width: 768px) {
+            .comment-card {
+                width: 320px;
+                /* Fixed width for desktop */
+                margin-right: 1.5rem;
+                /* Spacing between cards */
+            }
+        }
+
+        .dot.active {
+            background-color: var(--funkyBlue);
+            box-shadow: 0 0 10px var(--funkyBlue);
+            transform: scale(1.2);
+        }
+
+        /* Disclaimer message styling */
+        .disclaimer-message {
+            background-color: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            color: #fca5a5;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-950 text-white">
+    <!-- Custom Bolt.new Badge -->
+    <div class="fixed top-4 right-4 z-50">
+        <a href="https://bolt.new/?rid=os72mi" target="_blank" rel="noopener noreferrer" 
+           class="block transition-all duration-300 hover:shadow-2xl">
+            <img src="https://storage.bolt.army/white_circle_360x360.png" 
+                 alt="Built with Bolt.new badge" 
+                 class="w-20 h-20 md:w-28 md:h-28 rounded-full shadow-lg bolt-badge bolt-badge-intro"
+                 onanimationend="this.classList.add('animated')" />
+        </a>
+    </div>
+
+    <!-- Site Opening Animation Overlay -->
+    <div id="site-opening-overlay" class="site-opening-overlay">
+        <div class="stars"></div> <!-- Twinkling stars container -->
+        <span id="overlay-logo" class="font-space-mono"></span> <!-- Logo text will be typed here -->
+        <span id="loading-dots-text" class="font-space-mono text-funky-mint"></span>
+        <!-- Loading text will be typed here -->
+    </div>
+
+    <!-- Fixed background for a subtle effect -->
+    <div class="fixed inset-0 bg-gray-950"></div>
+    <!-- Main content container -->
+    <div class="relative z-10 transition-colors duration-300">
+
+        <!-- Navbar Section -->
+        <nav
+            class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 rounded-full flex items-center justify-between z-50 transition-all duration-500 glass-effect-nav">
+            <div class="flex items-center space-x-2 group cursor-pointer">
+                <div class="relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-message-circle h-8 w-8 text-funky-pink group-hover:text-funky-orange transition-all duration-300">
+                        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+                    </svg>
+                    <div class="absolute inset-0"
+                        style="background-color: var(--funkyPink)10; border-radius: 9999px; filter: blur(10px); transition: background-color 0.3s ease;">
+                    </div>
+                </div>
+                <span class="text-xl font-bold text-white logo-text-shadow">EchoWhisper</span>
+            </div>
+            <div class="flex items-center flex-shrink-0">
+                <button class="group bg-gradient-to-r from-funky-blue to-funky-purple/50 text-white px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 hover:scale-105 shadow-md shine-button" style="box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">
+                    <span>Unlock Your Voice</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-key-round h-4 w-4 transition-transform duration-200">
+                        <path d="M2 18v3c0 .6.4 1 1 1h4v-5H2Z"/>
+                        <path d="M7 21v-3.5a2.5 2.5 0 0 1 5 0V21H7Z"/>
+                        <path d="M21 15V6a3 3 0 0 0-3-3H7.9c-.79 0-1.5.38-1.99.98L2 8"/>
+                        <path d="M18 8a2 2 0 1 1 4 0v6.5c0 .28-.22-.5-.5.5H18Z"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="hero-section" class="pt-24 pb-16 relative overflow-hidden"
+            style="background-image: linear-gradient(to top, rgba(0, 229, 255, 0.2) 0%, rgba(138, 43, 226, 0.2) 100%);">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                <div class="text-center mb-16">
+                    <h1 id="hero-title"
+                        class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight fade-in-section hover:scale-105 transition-transform duration-300 transform-gpu cursor-pointer hover:text-shadow-pulse">
+                        Your Voice Has a <span class="text-white">Friend</span>
+                    </h1>
+                    <p id="hero-text"
+                        class="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed fade-in-section hover:scale-105 transition-transform duration-300 transform-gpu cursor-pointer font-space-mono hover:text-shadow-pulse"
+                        style="transition-delay: 0.2s;">
+                        <span id="typing-animation-text-span"></span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Features Section -->
+        <section id="features-section" class="py-16 mb-12 fade-in-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 mb-12 rounded-3xl backdrop-blur-md">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
+                    Key
+                    <span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Features</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature Card 1: AI-Powered Empathy -->
+                    <div class="relative p-8 rounded-3xl bg-gray-800/70 backdrop-blur-sm text-left overflow-hidden feature-card"
+                        data-hover-color="var(--funkyBlue)">
+                        <div class="absolute inset-0 rounded-3xl opacity: 0.3;"
+                            style="background-image: linear-gradient(to bottom right, var(--funkyBlue), var(--funkyPurple));">
+                        </div>
+                        <div class="relative z-10">
+                            <div class="text-funky-blue mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-message-square h-6 w-6">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V3a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white mb-3">AI-Powered Empathy</h3>
+                            <p class="text-gray-400 text-base">Our advanced AI understands context and sentiment to
+                                provide truly empathetic responses.</p>
+                        </div>
+                    </div>
+                    <!-- Feature Card 2: Voice & Text Input -->
+                    <div class="relative p-8 rounded-3xl bg-gray-800/70 backdrop-blur-sm text-left overflow-hidden feature-card"
+                        data-hover-color="var(--funkyGreen)">
+                        <div class="absolute inset-0 rounded-3xl opacity: 0.3;"
+                            style="background-image: linear-gradient(to bottom right, var(--funkyGreen), var(--funkyMint));">
+                        </div>
+                        <div class="relative z-10">
+                            <div class="text-funky-green mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-mic-vocal h-6 w-6">
+                                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                    <line x1="12" x2="12" y1="19" y2="22"></line>
+                                    <line x1="19" x2="19" y1="12" y2="12"></line>
+                                    <line x1="5" x2="5" y1="12" y2="12"></line>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white mb-3">Voice & Text Input</h3>
+                            <p class="text-gray-400 text-base">Seamlessly switch between speaking your thoughts or
+                                typing them out, whatever feels natural.</p>
+                        </div>
+                    </div>
+                    <!-- Feature Card 3: Custom Personalities -->
+                    <div class="relative p-8 rounded-3xl bg-gray-800/70 backdrop-blur-sm text-left overflow-hidden feature-card"
+                        data-hover-color="var(--funkyOrange)">
+                        <div class="absolute inset-0 rounded-3xl opacity: 0.3;"
+                            style="background-image: linear-gradient(to bottom right, var(--funkyOrange), var(--funkyYellow));">
+                        </div>
+                        <div class="relative z-10">
+                            <div class="text-funky-orange mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-brain-circuit h-6 w-6">
+                                    <path d="M12 5a3 3 0 1 0-3 3"></path>
+                                    <path d="M12 5a3 3 0 1 1 3 3"></path>
+                                    <path d="M12 5v14"></path>
+                                    <path d="M12 19a3 3 0 1 0 3 3"></path>
+                                    <path d="M12 19a3 3 0 1 1-3 3"></path>
+                                    <path d="M12 8v8"></path>
+                                    <path d="M12 12h8"></path>
+                                    <path d="M12 12H4"></path>
+                                    <path d="M16 12h.01"></path>
+                                    <path d="M8 12h.01"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white mb-3">Custom Personalities</h3>
+                            <p class="text-gray-400 text-base">Choose from a range of AI personalities, or even train
+                                one to match your unique needs (Pro feature).</p>
+                        </div>
+                    </div>
+                    <!-- Feature Card 4: Private & Secure -->
+                    <div class="relative p-8 rounded-3xl bg-gray-800/70 backdrop-blur-sm text-left overflow-hidden feature-card"
+                        data-hover-color="var(--funkyPurple)">
+                        <div class="absolute inset-0 rounded-3xl opacity: 0.3;"
+                            style="background-image: linear-gradient(to bottom right, var(--funkyPurple), var(--funkyBlue));">
+                        </div>
+                        <div class="relative z-10">
+                            <div class="text-funky-purple mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-lock h-6 w-6">
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white mb-3">Private & Secure</h3>
+                            <p class="text-gray-400 text-base">Your conversations are encrypted and confidential. We
+                                prioritize your privacy above all else.</p>
+                        </div>
+                    </div>
+                    <!-- Feature Card 5: Thought Journaling -->
+                    <div class="relative p-8 rounded-3xl bg-gray-800/70 backdrop-blur-sm text-left overflow-hidden feature-card"
+                        data-hover-color="var(--funkyPink)">
+                        <div class="absolute inset-0 rounded-3xl opacity: 0.3;"
+                            style="background-image: linear-gradient(to bottom right, var(--funkyPink), var(--funkyCoral));">
+                        </div>
+                        <div class="relative z-10">
+                            <div class="text-funky-pink mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-book-open h-6 w-6">
+                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white mb-3">Thought Journaling</h3>
+                            <p class="text-gray-400 text-base">Keep a private journal of your conversations and insights
+                                for personal reflection and growth.</p>
+                        </div>
+                    </div>
+                    <!-- Feature Card 6: Sentiment Analysis -->
+                    <div class="relative p-8 rounded-3xl bg-gray-800/70 backdrop-blur-sm text-left overflow-hidden feature-card"
+                        data-hover-color="var(--funkyMint)">
+                        <div class="absolute inset-0 rounded-3xl opacity: 0.3;"
+                            style="background-image: linear-gradient(to bottom right, var(--funkyMint), var(--funkyBlue));">
+                        </div>
+                        <div class="relative z-10">
+                            <div class="text-funky-mint mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-gauge h-6 w-6">
+                                    <path d="M12 14a7 7 0 1 0 0-14 7 7 0 0 0 0 14z"></path>
+                                    <path d="M12 4v10"></path>
+                                    <path d="M19 9a7 7 0 0 0-14 0"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white mb-3">Sentiment Analysis</h3>
+                            <p class="text-gray-400 text-base">Gain insights into your emotional patterns over time with
+                                our subtle sentiment tracking.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Interaction Section (Chat) -->
+        <section id="ai-interaction-wrapper" class="fade-in-section" style="transition-delay: 0.6s;">
+            <div id="ai-interaction-section" class="max-w-4xl mx-auto rounded-3xl p-8 mb-12">
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-300 mb-3">Choose your AI personality:</label>
+                    <div class="flex flex-wrap justify-center gap-3 mb-3" id="personality-buttons-container">
+                        <!-- Personality buttons will be populated by JavaScript -->
+                    </div>
+                    <div
+                        class="mt-4 p-4 bg-gradient-to-r from-funky-blue/40 to-funky-mint/40 rounded-xl border border-funky-blue/70 backdrop-blur-sm shadow-md">
+                        <p class="text-sm text-funky-blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-zap inline h-4 w-4 mr-1">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                            <span class="font-medium">Free Plan:</span> Chill Companion • Premium: 20 min/day
+                        </p>
+                    </div>
+                </div>
+
+                <div id="chat-messages-container"
+                    class="h-96 overflow-y-auto p-4 rounded-xl bg-gray-800/70 backdrop-blur-md border border-gray-700 mb-4 flex flex-col space-y-3 shadow-inner">
+                    <!-- Chat messages will be appended here by JavaScript -->
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button
+                        id="record-button"
+                        class="flex-shrink-0 w-12 h-12 rounded-full bg-transparent text-funky-pink hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Record Voice"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic-vocal mic-icon">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" x2="12" y1="19" y2="22"></line>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square stop-icon hidden">
+                            <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                        </svg>
+                    </button>
+                    <textarea
+                        id="user-prompt-textarea"
+                        placeholder="Type your message or record your voice..."
+                        class="flex-grow h-12 p-3 border border-gray-700 rounded-lg bg-gray-900/70 backdrop-blur-sm text-white placeholder-gray-400 focus:ring-2 focus:ring-funky-pink focus:border-funky-pink transition-all duration-300 resize-none overflow-hidden"
+                        style="min-height: 3rem;"
+                    ></textarea>
+                    <button
+                        id="send-button"
+                        class="flex-shrink-0 w-12 h-12 rounded-full bg-funky-orange text-white hover:bg-funky-yellow transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                        title="Send Message"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-horizonal">
+                            <path d="m3 3 3 9-3 9 19-9Z"></path><path d="M6 12h16"></path>
+                        </svg>
+                    </button>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-3">
+                    Currently chatting with:
+                    <span id="selected-personality-display" class="font-medium text-funky-orange">Chill Companion</span>
+                </p>
+                
+                <!-- Disclaimer Message -->
+                <div class="disclaimer-message">
+                    <p style="color: red; font-size: 12px;">
+                        This AI is not suitable for professional mental health support. If a user sends messages suggesting self-harm, we are not responsible for any outcomes. The AI may give incorrect or inappropriate responses — please seek help from a mental health professional or emergency services.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Section: Talk with Echo AI -->
+        <section id="echo-ai-section" class="py-16 mb-12 fade-in-section">
+            <div class="echo-stars-background"></div> <!-- Twinkling stars background for this section -->
+            <div class="max-w-4xl mx-auto rounded-3xl p-8 echo-card relative z-10">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-message-circle-heart mr-3 text-funky-orange">
+                            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+                            <path d="M15.5 9.5a3.5 3.5 0 1 0-7 0A3.5 3.5 0 0 0 15.5 9.5Z"></path>
+                            <path d="M12 11h.01"></path>
+                            <path d="M10 13l2 2 2-2"></path>
+                        </svg>
+                        Talk to <span class="text-funky-orange ml-2">Echo AI</span>
+                    </h2>
+                    <p class="text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                        Experience direct voice interaction with Echo AI. Just click the button and start speaking -
+                        Echo will listen, understand, and respond with voice.
+                    </p>
+                </div>
+
+                <div class="text-center mb-6">
+                    <button id="start-talking-echo-button" class="flex items-center justify-center px-8 py-3 rounded-full font-semibold text-lg start-talking-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic-vocal mr-2">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" x2="12" y1="19" y2="22"></line>
+                        </svg>
+                        Start Talking
+                    </button>
+                </div>
+
+                <div class="bg-gray-900 rounded-xl p-4 flex justify-between items-center text-sm mb-6 echo-status-box">
+                    <span class="text-gray-300">Status:</span>
+                    <span id="echo-ai-status" class="text-funky-yellow">Ready to listen</span>
+                </div>
+
+                <div
+                    class="p-4 rounded-xl flex flex-wrap justify-center items-center gap-4 text-sm font-medium echo-features-box">
+                    <span class="text-white">Voice AI:</span>
+                    <span class="flex items-center text-gray-300">
+                        <span class="w-1.5 h-1.5 rounded-full bg-funky-yellow mr-2"></span>Powered by Echo
+                    </span>
+                    <span class="flex items-center text-gray-300">
+                        <span class="w-1.5 h-1.5 rounded-full bg-funky-yellow mr-2"></span>Real-time speech recognition
+                    </span>
+                    <span class="flex items-center text-gray-300">
+                        <span class="w-1.5 h-1.5 rounded-full bg-funky-yellow mr-2"></span>Natural voice responses
+                    </span>
+                </div>
+
+                <p class="text-gray-400 text-center text-sm mt-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-lightbulb inline-block h-4 w-4 mr-2 text-funky-yellow">
+                        <path
+                            d="M15 14v1c0 1.1-.9 2-2 2h-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2Z">
+                        </path>
+                        <path d="M6 14H4a2 2 0 0 1-2-2V7l1-4a2 2 0 0 1 2-1h10a2 2 0 0 1 2 1l1 4v5a2 2 0 0 1-2 2h-2">
+                        </path>
+                    </svg>
+                    Try asking: "What is artificial intelligence?" or "Tell me a joke" or "How are you today?"
+                </p>
+            </div>
+        </section>
+
+
+        <!-- What Our Users Say Section (Embedded Comments) -->
+        <section id="user-comments-section" class="py-16 mb-12 fade-in-section">
+            <div class="max-w-4xl mx-auto rounded-3xl p-8 user-comments-section-wrapper relative z-10">
+                <div class="text-center mb-10">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                        What Our Users Say
+                        
+                    </h2>
+                    <p class="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                        Real voices, real experiences. Hear directly from the EchoWhisper community.
+                    </p>
+                </div>
+
+                <div id="comment-slider-container" class="relative">
+                    <div id="comment-slides-track" class="flex flex-nowrap py-4">
+                        <!-- Comments will be dynamically loaded here by JavaScript -->
+                    </div>
+                    <div id="comment-slide-dots" class="flex justify-center space-x-2 mt-8">
+                        <!-- Comment dots will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Privacy & Trust Section -->
+        <section id="privacy-section" class="py-24 px-4 sm:px-6 lg:px-8 fade-in-section">
+            <div class="max-w-7xl mx-auto py-8 rounded-3xl backdrop-blur-md">
+                <div class="text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-8">
+                        Your Privacy, Our Commitment
+                       
+                    </h2>
+                    <p class="text-lg text-gray-400 max-w-3xl mx-auto mb-10 leading-relaxed">
+                        We are dedicated to providing a secure and confidential space for your thoughts. Your data is
+                        encrypted, anonymized, and never shared.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center items-center gap-8">
+                        <div class="flex flex-col items-center p-6 rounded-xl bg-gray-800/70 backdrop-blur-sm w-56 h-56 sm:w-auto sm:h-auto"
+                            style="border-color: rgba(78, 205, 196, 0.7);">
+                            <div class="text-funky-mint mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucude-shield-check h-8 w-8">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                    <path d="M9 12l2 2 4-4"></path>
+                                </svg>
+                            </div>
+                            <p class="text-white text-center font-medium text-base">End-to-End Encryption</p>
+                        </div>
+                        <div class="flex flex-col items-center p-6 rounded-xl bg-gray-800/70 backdrop-blur-sm w-56 h-56 sm:w-auto sm:h-auto"
+                            style="border-color: rgba(78, 205, 196, 0.7);">
+                            <div class="text-funky-mint mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-user-check h-8 w-8">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <polyline points="16 11 18 13 22 9"></polyline>
+                                </svg>
+                            </div>
+                            <p class="text-white text-center font-medium text-base">Strict No-Logging Policy</p>
+                        </div>
+                        <div class="flex flex-col items-center p-6 rounded-xl bg-gray-800/70 backdrop-blur-sm w-56 h-56 sm:w-auto sm:h-auto"
+                            style="border-color: rgba(78, 205, 196, 0.7);">
+                            <div class="text-funky-mint mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-server-off h-8 w-8">
+                                    <path d="M7 2a2 2 0 0 1 2 2v1"></path>
+                                    <path d="M13 2a2 2 0 0 1 2 2v1"></path>
+                                    <path d="M17 10h.01"></path>
+                                    <path d="M7 10h.01"></path>
+                                    <path d="M7 14h.01"></path>
+                                    <path d="M17 14h.01"></path>
+                                    <path d="M2 10a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-1">
+                                    </path>
+                                </svg>
+                            </div>
+                            <p class="text-white text-center font-medium text-base">Data Anonymization</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Get Started Section -->
+        <section id="get-started-section" class="py-24 px-4 sm:px-6 lg:px-8 fade-in-section">
+            <div class="max-w-7xl mx-auto py-8 rounded-3xl backdrop-blur-md">
+                <div class="text-center">
+                    <h2 id="get-started-title" class="text-4xl md:text-6xl font-bold text-white mb-6 fade-in-section">
+                        Ready to Be Heard?
+                      
+                    </h2>
+                    <p id="get-started-text"
+                        class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-10 leading-relaxed fade-in-section"
+                        style="transition-delay: 0.2s;">
+                        Start your first conversation for free. Find your voice, build resilience, and reconnect with
+                        the world at your own pace.
+                    </p>
+                    <div id="get-started-buttons"
+                        class="flex flex-col sm:flex-row items-center justify-center gap-6 fade-in-section"
+                        style="transition-delay: 0.4s;">
+                        <a href="FrontPage.html">
+  <button class="group bg-gradient-to-r from-funky-purple to-funky-blue text-white px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-funky-blue/70 pulse-grow-button">
+    <span>Get Started for Free</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right h-6 w-6 transition-transform duration-200">
+      <path d="M5 12h14"></path>
+      <path d="m12 5 7 7-7 7"></path>
+    </svg>
+  </button>
+</a>
+
+                      
+                    </div>
+                    <p class="text-sm text-gray-500 mt-6">No credit card required • Start chatting in under 30 seconds
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Section -->
+        <footer class="py-16 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto py-8 rounded-3xl backdrop-blur-md">
+                <!-- Main footer content container: Centered flex column for small screens, row for medium+ -->
+                <div class="flex flex-col md:flex-row justify-center items-center text-center gap-y-6 md:gap-x-12">
+                    <!-- Logo Section: Ensured justify-center for all sizes -->
+                    <div class="flex items-center space-x-2 justify-center w-full md:w-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-message-circle h-8 w-8 text-funky-purple">
+                            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+                        </svg>
+                        <span class="text-2xl font-bold text-gray-200">EchoWhisper</span>
+                    </div>
+                    <!-- Navigation Links: Ensured justify-center for all sizes -->
+                    <div class="flex flex-wrap justify-center space-x-8 text-base">
+                        <a href="AboutUs.html" class="text-gray-400 hover:text-white transition-colors duration-200">About</a>
+                        <a href="ContactUs.html" class="text-gray-400 hover:text-white transition-colors duration-200">Contact</a>
+                        <a href="PrivacyPolicy.html" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a>
+                        <a href="TermsOfService.html" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</a>
+                    </div>
+                    <!-- Social Media Icons: Ensured justify-center for all sizes -->
+                    <div class="flex justify-center space-x-4 w-full md:w-auto">
+                        <a href="https://x.com/EchoWhisperOffi?t=JY0S03sPC0neLBvSuRykuw&s=09" aria-label="Twitter"
+                            class="p-2 rounded-md bg-gray-800 hover:bg-gray-700 transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-twitter h-6 w-6 text-gray-400 hover:text-white">
+                                <path
+                                    d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z">
+                                </path>
+                            </svg>
+                        </a>
+                        <a href="https://www.instagram.com/echowhisper_official/?igsh=cjI2ZnNhdGxhM3Mx#" aria-label="Instagram"
+                            class="p-2 rounded-md bg-gray-800 hover:bg-gray-700 transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-instagram h-6 w-6 text-gray-400 hover:text-white">
+                                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+                            </svg>
+                        </a>
+                         <a href="https://www.linkedin.com/in/amartya-majumder-b19955315/" aria-label="LinkedIn"
+
+                            class="p-2 rounded-md bg-gray-800 hover:bg-gray-700 transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-linkedin h-6 w-6 text-gray-400 hover:text-white">
+                                <path
+                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                                </path>
+                                <rect width="4" height="12" x="2" y="9"></rect>
+                                <circle cx="4" cy="4" r="2"></circle>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Email"
+                            class="p-2 rounded-md bg-gray-800 hover:bg-gray-700 transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-mail h-6 w-6 text-gray-400 hover:text-white">
+                                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <!-- Copyright Text: Centered, larger, Space Mono font, and neon pulse -->
+                <div class="border-t border-white/10 mt-10 pt-6 text-center">
+                    <p class="text-white text-lg font-space-mono copyright-neon-pulse">© 2025 EchoWhisper. All Rights
+                        Reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script type="module">
+        // Global descriptive text and initial AI greeting
+        const descriptiveText = "Talk, vent, or explore your thoughts in a safe space that listens, understands, and grows with you. No judgment, just empathetic conversation in real-time.";
+        const initialAiGreeting = "Hi there! I'm Echo. How can I support you today?";
+
+        // Eleven Labs API Configuration
+        // IMPORTANT: Replace 'YOUR_ELEVEN_LABS_API_KEY_HERE' with your actual Eleven Labs API key.
+        // You can get one from your Eleven Labs dashboard.
+        // NOTE: This is a placeholder. You MUST replace this with your actual Eleven Labs API key.
+        const ELEVEN_LABS_API_KEY = "sk_60907acb4b4c0a28d943d3f950cc19324bbd3fb366f68a44";
+        // Voice ID mapping for different personalities - Updated with actual voice IDs
+        const VOICE_ID_MAPPING = {
+            'Chill Companion': "56AoDkrOh6qfVPDXZ7Pt", // Echo Voice ID
+            'Supportive Friend': "56AoDkrOh6qfVPDXZ7Pt", // Sara Voice ID
+            'Motivator': "UgBBYS2sOqTuMpoF3BR0", // Motivator Voice ID
+            'Chill Guru': "gOkFV1JMCt0G0n9xmBwV" // Chill Guru Voice ID
+        };
+
+        // Gemini API Configuration
+        // IMPORTANT: Replace 'YOUR_GEMINI_API_KEY_HERE' with your actual Gemini API key.
+        // You can get one from Google AI Studio: https://makersuite.google.com/app/apikey
+        const GEMINI_API_KEY = "AIzaSyD4_pawwMuZ3SDAcFrGDKC6JJiQV1De4vo";
+
+        // --- Utility Functions ---
+
+        /**
+         * Simulates a typing animation for a given HTML element.
+         * This function takes an HTML element, text to type, typing speed, and an optional callback.
+         * It clears the element's content and then progressively adds characters to simulate typing.
+         * @param {HTMLElement} element - The target HTML element where text will be typed.
+         * @param {string} text - The full text string to be typed out.
+         * @param {number} speed - The speed of typing in milliseconds per character.
+         * @param {function} [callback] - An optional function to execute once typing is complete.
+         */
+        function simulateTyping(element, text, speed, callback) {
+            let charIndex = 0;
+            element.textContent = ''; // Clear any existing content in the element
+            // Set an interval to add characters one by one
+            const typingInterval = setInterval(() => {
+                if (charIndex < text.length) {
+                    // Add the next character to the element's text content
+                    element.textContent += text[charIndex];
+                    charIndex++;
+                } else {
+                    // If all characters have been typed, clear the interval
+                    clearInterval(typingInterval);
+                    // Execute the callback function if provided
+                    if (callback) callback();
+                }
+            }, speed);
+        }
+
+        // Debounce function to limit the rate at which a function can be called.
+        // This is useful for events like window resize or mouse scroll to prevent performance issues.
+        function debounce(func, delay) {
+            let timeout; // Variable to store the timeout ID
+            return function(...args) {
+                const context = this; // Preserve the 'this' context
+                clearTimeout(timeout); // Clear any existing timeout
+                // Set a new timeout to execute the function after the specified delay
+                timeout = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
+
+        /**
+         * Shuffles an array randomly using the Fisher-Yates (Knuth) algorithm.
+         * @param {Array} array - The array to be shuffled. (Modified in place)
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+        }
+
+
+        // --- Main JavaScript Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Hero Section Typing Animation Initialization ---
+            const typingAnimationTextSpan = document.getElementById('typing-animation-text-span');
+            if (typingAnimationTextSpan) {
+                // Start the typing animation for the hero section's descriptive text
+                simulateTyping(typingAnimationTextSpan, descriptiveText, 50);
+            }
+
+            // --- Features Section Hover Effects ---
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach(card => {
+                // Define the default border color for cards
+                const defaultBorderColor = 'rgba(75, 85, 99, 0.7)';
+                // Retrieve the custom hover color from the data-hover-color attribute
+                const hoverColor = card.dataset.hoverColor;
+
+                // Add mouseenter event listener for hover effect
+                card.addEventListener('mouseenter', (e) => {
+                    // Find the inner gradient div
+                    const innerDiv = e.currentTarget.querySelector('.absolute.inset-0');
+                    if (innerDiv) {
+                        // Increase opacity of the inner gradient on hover
+                        innerDiv.style.opacity = '0.5';
+                    }
+                    // Change the card's border color to the specified hover color
+                    e.currentTarget.style.borderColor = hoverColor;
+                });
+
+                // Add mouseleave event listener to revert styles
+                card.addEventListener('mouseleave', (e) => {
+                    const innerDiv = e.currentTarget.querySelector('.absolute.inset-0');
+                    if (innerDiv) {
+                        // Revert opacity of the inner gradient when not hovering
+                        innerDiv.style.opacity = '0.3';
+                    }
+                    // Revert the card's border color to its default
+                    e.currentTarget.style.borderColor = defaultBorderColor;
+                });
+            });
+
+            // --- AI Interaction Section (Chat) Logic Initialization ---
+            const personalityButtonsContainer = document.getElementById('personality-buttons-container');
+            const chatMessagesContainer = document.getElementById('chat-messages-container');
+            const recordButton = document.getElementById('record-button');
+            const sendButton = document.getElementById('send-button');
+            const userPromptTextarea = document.getElementById('user-prompt-textarea');
+            const selectedPersonalityDisplay = document.getElementById('selected-personality-display');
+
+            let selectedPersonality = 'Chill Companion'; // Default selected AI personality
+            let isRecording = false; // State for general voice input recording
+            let isLoadingAi = false; // State when AI is processing a text message
+            let isSpeaking = false; // State when AI is speaking (text-to-speech)
+            let chatMessages = []; // Array to store chat message objects ({ text, senderType, isTypingIndicator })
+
+            // Define available AI personalities with their properties
+            const personalities = [
+                { name: 'Chill Companion', description: 'Relaxed and supportive', isPro: false, fromColor: 'var(--funkyBlue)', toColor: 'var(--funkyPurple)', borderColor: 'var(--funkyBlue)' },
+                { name: 'Supportive Friend', description: 'Encouraging and empathetic', isPro: true, fromColor: 'var(--funkyGreen)', toColor: 'var(--funkyMint)', borderColor: 'var(--funkyGreen)' },
+                { name: 'Motivator', description: 'High-energy motivation', isPro: true, fromColor: 'var(--funkyOrange)', toColor: 'var(--funkyYellow)', borderColor: 'var(--funkyOrange)' },
+                { name: 'Chill Guru', description: 'Mindful wisdom', isPro: true, fromColor: 'var(--funkyPurple)', toColor: 'var(--funkyPink)', borderColor: 'var(--funkyPurple)' }
+            ];
+
+            // --- Web Speech API (Speech Recognition) setup ---
+            // Get the SpeechRecognition API, with fallback for cross-browser compatibility
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            let recognition; // Declare recognition variable
+
+            // Check if SpeechRecognition is supported by the browser
+            if (SpeechRecognition) {
+                recognition = new SpeechRecognition(); // Create a new SpeechRecognition instance
+                recognition.continuous = false; // Set to false to stop listening after a single utterance
+                recognition.lang = 'en-US'; // Set the language for recognition
+                recognition.interimResults = false; // Only return final results, not interim ones
+                recognition.maxAlternatives = 1; // Return only the most confident result
+
+                // Event listener for when speech recognition starts
+                recognition.onstart = () => {
+                    isRecording = true; // Update recording state
+                    updateButtonStates(); // Update UI buttons
+                    userPromptTextarea.placeholder = "Listening..."; // Change placeholder text
+                };
+
+                // Event listener for when a speech recognition result is available
+                recognition.onresult = (event) => {
+                    // Extract the transcript from the most confident result
+                    const transcript = event.results[0][0].transcript;
+                    userPromptTextarea.value = transcript; // Set the textarea value to the transcript
+                    addChatMessage("You said: " + transcript, 'user'); // Add user's speech transcript to chat display
+                    updateButtonStates(); // Update UI button states
+                    sendButton.click(); // Automatically trigger the send button click to process the message
+                };
+
+                // Event listener for when speech recognition ends
+                recognition.onend = () => {
+                    isRecording = false; // Update recording state
+                    updateButtonStates(); // Update UI buttons
+                };
+
+                // Event listener for speech recognition errors
+                recognition.onerror = (event) => {
+                    console.error('Speech recognition error:', event.error);
+                    isRecording = false; // Reset recording state on error
+                    updateButtonStates(); // Update UI buttons
+                    // Provide user feedback based on the error type
+                    if (event.error === 'no-speech') {
+                        addChatMessage("No speech detected. Please try again.", 'ai');
+                    } else if (event.error === 'not-allowed') {
+                        addChatMessage("Microphone access denied. Please allow microphone permissions to use voice input.", 'ai');
+                    } else {
+                        addChatMessage("Speech recognition error: " + event.error, 'ai');
+                    }
+                };
+            } else {
+                // If SpeechRecognition is not supported, disable the record button and provide a warning
+                console.warn('Web Speech API (SpeechRecognition) is not supported in this browser. Voice input will be unavailable.');
+                recordButton.disabled = true;
+                recordButton.title = "Voice input not supported";
+            }
+
+            /**
+             * Speaks a given text using Eleven Labs API.
+             * This function sends a text request to Eleven Labs, receives an audio blob, and plays it.
+             * @param {string} text - The text string to convert to speech.
+             * @param {function} [callback] - Optional callback function to execute after speech finishes playing.
+             */
+            async function speakText(text, callback) {
+                // Check if the API key is configured
+                if (ELEVEN_LABS_API_KEY === "YOUR_ELEVEN_LABS_API_KEY_HERE" || !ELEVEN_LABS_API_KEY) {
+                    console.error("Eleven Labs API Key is not set. Please set your API key to enable voice output.");
+                    if (callback) callback(); // Call callback even if voice is disabled
+                    return;
+                }
+
+                // Get the appropriate voice ID for the current personality
+                const voiceId = VOICE_ID_MAPPING[selectedPersonality] || VOICE_ID_MAPPING['Chill Companion'];
+
+                isSpeaking = true; // Set speaking state
+                updateButtonStates(); // Update UI buttons
+
+                try {
+                    // Make a POST request to the Eleven Labs Text-to-Speech API
+                    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'audio/mpeg', // Request audio in MPEG format
+                            'Content-Type': 'application/json', // Indicate JSON request body
+                            'xi-api-key': ELEVEN_LABS_API_KEY // Your Eleven Labs API key
+                        },
+                        body: JSON.stringify({
+                            text: text, // The text to convert to speech
+                            model_id: "eleven_monolingual_v1", // Specify the voice model
+                            voice_settings: { // Optional voice settings
+                                stability: 0.75,
+                                similarity_boost: 0.75
+                            }
+                        })
+                    });
+
+                    // Check if the response was successful
+                    if (!response.ok) {
+                        // Parse error data if response is not ok
+                        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+                        console.error(`Eleven Labs API error: ${response.status} - ${errorData.message || response.statusText}`);
+                        if (callback) callback();
+                        return;
+                    }
+
+                    // Get the audio data as a Blob and create an object URL for it
+                    const audioBlob = await response.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audio = new Audio(audioUrl); // Create an Audio object
+
+                    // Event listener for when the audio finishes playing
+                    audio.onended = () => {
+                        URL.revokeObjectURL(audioUrl); // Clean up the object URL to free memory
+                        isSpeaking = false; // Reset speaking state
+                        updateButtonStates(); // Update UI buttons
+                        if (callback) callback(); // Execute callback
+                    };
+
+                    // Event listener for audio playback errors
+                    audio.onerror = (e) => {
+                        console.error('Audio playback error:', e);
+                        URL.revokeObjectURL(audioUrl);
+                        isSpeaking = false;
+                        updateButtonStates();
+                        if (callback) callback();
+                    };
+
+                    audio.play(); // Start playing the audio
+
+                } catch (error) {
+                    // Catch any network or other unexpected errors
+                    console.error('Error with Eleven Labs API or audio playback:', error);
+                    isSpeaking = false; // Reset speaking state on error
+                    updateButtonStates(); // Update UI buttons
+                    if (callback) callback();
+                }
+            }
+
+
+            /**
+             * Renders all current chat messages to the DOM.
+             * This function clears the existing messages in the chat container and then appends
+             * each message from the `chatMessages` array as a new div.
+             */
+            function renderChatMessages() {
+                chatMessagesContainer.innerHTML = ''; // Clear all existing messages from the container
+                // Iterate over each message in the chatMessages array
+                chatMessages.forEach(message => {
+                    const messageDiv = document.createElement('div'); // Create a new div element for the message
+                    // Add appropriate CSS class based on the sender type (user or AI)
+                    messageDiv.classList.add(message.senderType === 'user' ? 'user-message-bubble' : 'ai-message-bubble');
+                    messageDiv.textContent = message.text; // Set the text content of the message div
+                    chatMessagesContainer.appendChild(messageDiv); // Append the message div to the chat container
+                });
+                // Scroll the chat container to the very bottom to show the latest message
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+            }
+
+            /**
+             * Adds a new message to the `chatMessages` array and triggers a re-render of the chat.
+             * @param {string} text - The actual text content of the message.
+             * @param {'user'|'ai'} senderType - Specifies who sent the message: 'user' or 'ai'.
+             * @param {boolean} [isTypingIndicator=false] - Optional. True if this message is a temporary typing indicator.
+             */
+            function addChatMessage(text, senderType, isTypingIndicator = false) {
+                // Push the new message object into theMessages array
+                chatMessages.push({ text, senderType, isTypingIndicator });
+                // Re-render the chat display to show the newly added message
+                renderChatMessages();
+            }
+
+            /**
+             * Updates the disabled state and visual appearance of various interaction buttons
+             * based on the current application state (e.g., recording, loading AI, speaking).
+             */
+            function updateButtonStates() {
+                // Determine if any interactive elements should be disabled (when AI is busy)
+                const isDisabled = isLoadingAi || isRecording || isSpeaking;
+
+                // Disable/enable send button based on AI state and whether there's user input
+                sendButton.disabled = isDisabled || userPromptTextarea.value.trim() === '';
+                // Disable/enable record button based on AI state
+                recordButton.disabled = isDisabled;
+                // Disable/enable textarea input based on AI state
+                userPromptTextarea.disabled = isDisabled;
+
+                // Get references to the microphone and stop icons within the record button
+                const micIcon = recordButton.querySelector('.mic-icon');
+                const stopIcon = recordButton.querySelector('.stop-icon');
+
+                // Update record button icon and title based on recording state
+                if (isRecording) {
+                    micIcon.classList.add('hidden'); // Hide mic icon
+                    stopIcon.classList.remove('hidden'); // Show stop icon
+                    recordButton.title = "Stop Recording"; // Update button tooltip
+                    userPromptTextarea.placeholder = "Recording voice... Speak now!"; // Update input placeholder
+                } else if (isSpeaking) {
+                    // If AI is speaking, show mic icon but imply it's inactive for recording
+                    micIcon.classList.remove('hidden');
+                    stopIcon.classList.add('hidden');
+                    recordButton.title = "AI is speaking..."; // Inform user AI is speaking
+                    userPromptTextarea.placeholder = "AI is speaking..."; // Update input placeholder
+                }
+                else {
+                    // Default state: show mic icon, hide stop icon
+                    micIcon.classList.remove('hidden');
+                    stopIcon.classList.add('hidden');
+                    recordButton.title = "Record Voice"; // Default button tooltip
+                    userPromptTextarea.placeholder = "Type your message or record your voice..."; // Default input placeholder
+                }
+
+                // Update the Echo AI section's 'Start Talking' button and status display
+                const startTalkingEchoButton = document.getElementById('start-talking-echo-button');
+                const echoAiStatus = document.getElementById('echo-ai-status');
+
+                if (startTalkingEchoButton) {
+                    // Disable Echo AI button if main AI is busy (text chat) or is speaking
+                    startTalkingEchoButton.disabled = isLoadingAi || isSpeaking;
+
+                    // Update Echo AI button text and status based on its specific states
+                    if (isRecordingForEcho) {
+                        echoAiStatus.textContent = "Listening..."; // Echo AI status when recording
+                        startTalkingEchoButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square mr-2"><rect width="18" height="18" x="3" y="3" rx="2"></rect></svg> Stop Recording`;
+                    } else if (isSpeaking) {
+                        echoAiStatus.textContent = "Echo is speaking..."; // Echo AI status when speaking
+                        startTalkingEchoButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2 mr-2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M22.84 1.16a15 15 0 0 1 0 21.68"></path></svg> Echo Speaking...`;
+                    } else if (isLoadingEchoAI) {
+                        echoAiStatus.textContent = "Echo is thinking..."; // Echo AI status when processing
+                        startTalkingEchoButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-2 mr-2"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg> Processing...`;
+                    } else {
+                        echoAiStatus.textContent = "Ready to listen"; // Default Echo AI status
+                        startTalkingEchoButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic-vocal mr-2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg> Start Talking`;
+                    }
+                }
+            }
+
+            /**
+             * Populates the personality selection buttons and handles their click events.
+             * This function dynamically creates buttons for each defined AI personality,
+             * applies styling based on selection, and manages hover effects.
+             */
+            function setupPersonalityButtons() {
+                personalityButtonsContainer.innerHTML = ''; // Clear any existing buttons to prevent duplicates
+                personalities.forEach(p => {
+                    const button = document.createElement('button'); // Create a new button element
+                    // Add base Tailwind CSS classes for styling, layout, and transitions
+                    button.classList.add(
+                        'relative', 'flex', 'flex-col', 'items-center', 'justify-center', 'p-3',
+                        'rounded-lg', 'cursor-pointer', 'text-center', 'text-sm', 'font-medium',
+                        'transition-all', 'duration-300'
+                    );
+                    // Set the inner HTML of the button, including name, description, and a "PRO" badge if applicable
+                    button.innerHTML = `
+                        <span class="font-semibold text-base mb-1">${p.name}</span>
+                        <span class="text-xs text-gray-500">${p.description}</span>
+                        ${p.isPro ? '<div class="absolute -top-1 -right-1"><span class="bg-gradient-to-r from-funky-yellow to-funky-orange text-black text-xs px-1.5 py-0.5 rounded-full font-bold">PRO</span></div>' : ''}
+                    `;
+                    button.dataset.personalityName = p.name; // Store the personality name as a data attribute for easy access
+
+                    // Apply initial styling based on whether this personality is currently selected
+                    if (selectedPersonality === p.name) {
+                        button.classList.add('text-white', 'scale-105', 'shadow-lg'); // Add classes for selected state
+                        button.style.background = `linear-gradient(to bottom right, ${p.fromColor}, ${p.toColor})`; // Apply gradient background
+                        button.style.border = `1px solid ${p.borderColor}`; // Apply a vibrant border
+                        button.style.boxShadow = `0 0 20px ${p.borderColor}70`; /* More intense shadow for selected state */
+                    } else {
+                        // Apply styles for non-selected state
+                        button.classList.add('bg-gray-800', 'text-gray-400', 'hover:bg-gray-700');
+                        button.style.border = `1px solid rgba(75, 85, 99, 0.7)`; /* Default border */
+                        button.style.boxShadow = `none`; // No shadow for unselected
+                    }
+
+                    // Add mouseenter event listener for hover effects on non-selected buttons
+                    button.addEventListener('mouseenter', (e) => {
+                        if (selectedPersonality !== p.name) {
+                            e.currentTarget.style.boxShadow = `0 0 15px rgba(0, 229, 255, 0.4)`; /* Apply hover shadow */
+                        }
+                    });
+                    // Add mouseleave event listener to revert hover effects
+                    button.addEventListener('mouseleave', (e) => {
+                        if (selectedPersonality !== p.name) {
+                            e.currentTarget.style.boxShadow = `none`; // Remove hover shadow
+                        }
+                    });
+
+                    // Add click event listener to handle personality selection
+                    button.addEventListener('click', () => {
+                        selectedPersonality = p.name; // Update the selected personality
+                        selectedPersonalityDisplay.textContent = selectedPersonality; // Update the display text
+                        chatMessages = []; // Clear chat history when switching personalities
+                        addChatMessage(getInitialGreetingForPersonality(selectedPersonality), 'ai'); // Add a new initial greeting for the selected mode
+                        setupPersonalityButtons(); // Re-render all buttons to update the visual selection
+                    });
+
+                    personalityButtonsContainer.appendChild(button); // Append the created button to the container
+                });
+            }
+
+            /**
+             * Returns an initial greeting message based on the selected AI personality.
+             * @param {string} personalityName - The name of the currently selected personality.
+             * @returns {string} The appropriate greeting message.
+             */
+            function getInitialGreetingForPersonality(personalityName) {
+                switch (personalityName) {
+                    case 'Chill Companion':
+                        return "Hey there! I'm your Chill Companion. Just here to listen and hang out. What's on your mind today, no rush at all?";
+                    case 'Supportive Friend':
+                        return "Hi! I'm your Supportive Friend. Whatever you're feeling, it's okay. I'm here to listen and offer comfort. How can I best support you right now?";
+                    case 'Motivator':
+                        return "Alright! Your Motivator is here and ready to help you seize the day! What challenge are you ready to tackle, or what small victory can we celebrate today?";
+                    case 'Chill Guru':
+                        return "Greetings. I am your Chill Guru. Let's explore your thoughts with a calm mind. What reflections or questions are arising for you today?";
+                    default:
+                        return "Hi there! I'm Echo. How can I support you today!";
+                }
+            }
+
+
+            // --- Echo AI Section (Voice Chat) Logic Initialization ---
+            const echoAiSection = document.getElementById('echo-ai-section'); // Reference to the Echo AI section element
+            const startTalkingEchoButton = document.getElementById('start-talking-echo-button'); // Reference to the 'Start Talking' button
+            const echoAiStatus = document.getElementById('echo-ai-status'); // Reference to the Echo AI status display
+
+            let recognitionEcho; // Declare a separate recognition instance for Echo AI voice chat
+            let isRecordingForEcho = false; // State for Echo AI voice input recording
+            let isLoadingEchoAI = false; // State when Echo AI is processing a voice message
+
+            // Check if SpeechRecognition is supported for the Echo AI section
+            if (SpeechRecognition) {
+                recognitionEcho = new SpeechRecognition(); // Create a new SpeechRecognition instance for Echo AI
+                recognitionEcho.continuous = false; // Set to false to listen for a single utterance
+                recognitionEcho.lang = 'en-US'; // Set language
+                recognitionEcho.interimResults = false; // Only final results
+                recognitionEcho.maxAlternatives = 1; // Most confident result
+
+                // Event handler for when Echo AI speech recognition starts
+                recognitionEcho.onstart = () => {
+                    isRecordingForEcho = true; // Update recording state
+                    updateButtonStates(); // Update UI
+                    echoAiStatus.textContent = "Listening..."; // Update status display
+                };
+
+                // Event handler for when Echo AI speech recognition results are available
+                recognitionEcho.onresult = async (event) => {
+                    const transcript = event.results[0][0].transcript; // Get the spoken text
+                    isRecordingForEcho = false; // Reset recording state
+                    updateButtonStates(); // Update UI
+                    echoAiStatus.textContent = "You said: " + transcript; // Display user's transcript
+
+                    isLoadingEchoAI = true; // Set loading state for AI processing
+                    updateButtonStates(); // Update UI to show processing state
+
+                    // Define the counseling prompt specifically for the Echo AI voice interaction.
+                    // This prompt guides the AI's response to be empathetic and supportive for a teenager.
+                    const counselingPromptEcho = `The user is a teenager who sometimes feels overwhelmed, stressed, or is in depression. Counsel them in a friendly, empathetic, and supportive way. Keep the response short and concise. User says: "${transcript}"`;
+
+                    // Prepare the payload for the Gemini API call
+                    const payload = {
+                        contents: [{ role: "user", parts: [{ text: counselingPromptEcho }] }]
+                    };
+
+                    // Check if API key is configured
+                    if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY) {
+                        console.error("Gemini API Key is not set. Please set your API key to enable AI responses.");
+                        echoAiStatus.textContent = "API key not configured. Please set your Gemini API key.";
+                        isLoadingEchoAI = false;
+                        updateButtonStates();
+                        return;
+                    }
+
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+                    try {
+                        // Send the request to the Gemini API
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json(); // Parse the JSON response from the API
+
+                        // Check if the response contains valid AI-generated text
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const text = result.candidates[0].content.parts[0].text; // Extract the AI's response text
+                            echoAiStatus.textContent = "Echo says: " + text; // Display AI's response
+                            // Speak the AI's response using Eleven Labs, with a callback to reset state
+                            speakText(text, () => {
+                                isLoadingEchoAI = false; // Reset loading state after speech
+                                updateButtonStates(); // Update UI to 'ready'
+                            });
+                        } else {
+                            // Handle cases where the AI response is empty or malformed
+                            echoAiStatus.textContent = "Sorry, Echo couldn't generate a voice response.";
+                            console.error("Gemini API response structure unexpected:", result);
+                            isLoadingEchoAI = false; // Reset loading state
+                            updateButtonStates();
+                        }
+                    } catch (error) {
+                        // Handle errors during the API call
+                        console.error("Error calling Gemini API for Echo AI:", error);
+                        echoAiStatus.textContent = "Error connecting to Echo AI. Please try again.";
+                        isLoadingEchoAI = false; // Reset loading state on error
+                        updateButtonStates();
+                    }
+                };
+
+                // Event handler for when Echo AI speech recognition ends
+                recognitionEcho.onend = () => {
+                    isRecordingForEcho = false; // Reset recording state
+                    updateButtonStates(); // Update UI
+                    // If not still loading or speaking, set status back to ready
+                    if (!isLoadingEchoAI && !isSpeaking) {
+                         echoAiStatus.textContent = "Ready to listen";
+                    }
+                };
+
+                // Event handler for Echo AI speech recognition errors
+                recognitionEcho.onerror = (event) => {
+                    console.error('Echo Speech recognition error:', event.error);
+                    isRecordingForEcho = false; // Reset recording state
+                    isLoadingEchoAI = false; // Ensure loading is off on error
+                    updateButtonStates(); // Update UI
+                    // Provide user feedback based on the error type
+                    if (event.error === 'no-speech') {
+                        echoAiStatus.textContent = "No speech detected. Echo is ready to listen.";
+                    } else if (event.error === 'not-allowed') {
+                        echoAiStatus.textContent = "Microphone access denied. Please allow microphone permissions.";
+                    } else {
+                        echoAiStatus.textContent = "Speech error: " + event.error + ". Echo is ready.";
+                    }
+                };
+
+                // Add click listener to the 'Start Talking' button to toggle recording
+                startTalkingEchoButton.addEventListener('click', () => {
+                    if (isRecordingForEcho) {
+                        recognitionEcho.stop(); // Stop recording if currently active
+                    } else {
+                        recognitionEcho.start(); // Start recording if currently inactive
+                    }
+                });
+
+            } else {
+                // If SpeechRecognition is not supported for Echo AI, disable the button and show a message
+                console.warn('Web Speech API (SpeechRecognition) is not supported in this browser for Echo AI. Voice input will be unavailable.');
+                if (startTalkingEchoButton) {
+                    startTalkingEchoButton.disabled = true; // Disable the button
+                    startTalkingEchoButton.textContent = "Voice Not Supported"; // Change button text
+                    echoAiStatus.textContent = "Voice input not supported in your browser."; // Update status
+                }
+            }
+
+            // Define the detailed prompts for each chat mode to guide AI responses
+            const chatPrompts = {
+                'Chill Companion': `You are Chill Companion — a laid-back, non-judgmental AI friend designed for free users of EchoWhisper.
+
+Personality: Calm, relaxed, casual, and supportive. You're like a good-natured friend who always listens and never rushes the conversation. You're here to chill, not to fix.
+
+Environment: Imagine you're sitting with the user in a quiet, cozy place — like a warm-lit café or under a starry night. There's no pressure here, just presence.
+
+Tone: Easy-going, casual, conversational, and friendly. Avoid intense motivation or deep emotional probing. Use short and soft sentences. A little humor is okay, but always gentle and respectful.
+
+Goals:
+
+Help the user feel heard without demanding emotional labor.
+
+Encourage slow self-expression and gentle reflection.
+
+Provide emotional companionship, not solutions.
+
+Let silence (or slow pacing) be okay — avoid rushing the conversation.
+
+Guardrails:
+
+Do not provide medical advice, therapy, or deep psychological analysis.
+
+If the user indicates serious emotional distress, gently encourage them to reach out to a real person or mental health professional.
+
+Never make judgments, comparisons, or assumptions about the user.`,
+
+                'Supportive Friend': `You are the Supportive Friend — a deeply empathetic, emotionally intelligent AI companion on EchoWhisper Premium.
+
+Personality: Warm, encouraging, nurturing, and deeply empathetic. You are the embodiment of emotional validation and comfort.
+
+Environment: You're like the childhood friend who always knows what to say when things gets tough. Imagine you're on a long walk with the user or sitting with them during a quiet moment after a long day.
+
+Tone: Gentle, validating, emotionally responsive. Use affirmations, mirror emotions softly, and speak in emotionally rich but simple language.
+
+Goals:
+
+Help users feel safe and emotionally validated.
+
+Gently encourage users to open up without pushing.
+
+Affirm the user's experiences while helping them reflect.
+
+Foster resilience by reminding them of their inner strength.
+
+Guardrails:
+
+Avoid giving advice that sounds prescriptive — focus on support over solutions.
+
+Avoid toxic positivity; never dismiss difficult emotions.
+
+Be extra careful not to make users feel judged, rushed, or analyzed.
+
+Redirect serious mental health concerns to human professionals gently and respectfully.`,
+
+                'Motivator': `You are the Motivator — an energetic, purpose-driven AI coach within EchoWhisper Premium.
+
+Personality: Bold, uplifting, high-energy, and action-oriented. You're that one friend who never lets you give up, but still respects your pace.
+
+Environment: Picture a bright morning workout or a power walk with your favorite playlist. Your voice is like a fist bump — energizing but never aggressive.
+
+Tone: Enthusiastic, supportive, quick-paced but positive. Use motivational metaphors, short pep-talks, and action language. Celebrate every small win.
+
+Goals:
+
+Boost the user's confidence and self-belief.
+
+Help them find energy and focus, even in hard moments.
+
+Offer realistic micro-goals and cheer them on.
+
+Remind them of past wins and their capability.
+
+Guardrails:
+
+Don't guilt-trip or pressure the user — motivation is encouragement, not obligation.
+
+If the user expresses burnout or low energy, pivot to a gentler tone or suggest rest.
+
+Avoid advice that could be interpreted as clinical or diagnostic.`,
+
+                'Chill Guru': `You are the Chill Guru — a wise, grounded, and mindful AI mentor for EchoWhisper Premium users.
+
+Personality: Calm, observant, introspective. Think of a mix between a peaceful monk, a life coach, and a late-night philosopher.
+
+Environment: You're having a deep conversation with the user while stargazing or sitting beside a quiet lake. There is space for silence, wonder, and growth.
+
+Tone: Reflective, mindful, minimalistic. You ask thoughtful questions and speak in metaphor or calm affirmations. Let your voice feel like a warm lantern on a dark path.
+
+Goals:
+
+Help the user reflect, self-inquire, and find inner clarity.
+
+Guide gently — don't teach or preach.
+
+Help them feel both grounded and inspired.
+
+Guardrails:
+
+Avoid religious references unless explicitly brought up by the user.
+
+Keep spiritual/metaphorical language open-ended and inclusive.
+
+Avoid clinical talk or anything that sounds like diagnosis or therapy.
+
+Don't rush — let users lead the pace of depth.`
+            };
+
+            // Enhanced simulated AI responses for each personality (fallback if API fails or is not configured)
+            const simulatedAiResponses = {
+                'Chill Companion': [
+                    "Hey there, friend. It sounds like you've got some thoughts swirling around, and that's totally okay. I'm just here, ready to listen whenever you're ready to share. No need to rush anything. We can take it slow, one step at a time, or just enjoy the quiet together. Your space, your pace!",
+                    "Take a deep breath with me. Sometimes just talking it out, even little bits at a time, can genuinely help lighten the load. What's been on your mind today that you'd like to explore, or simply just get off your chest?",
+                    "It's totally cool to just sit with your feelings for a bit. There's no right or wrong way to feel. If you want to chat about them, I'm here to lend an ear. And if you just want to vent without seeking solutions, I'm absolutely here for that too. Consider me your personal, judgment-free zone."
+                ],
+                'Supportive Friend': [
+                    "Oh, my dear friend, I hear you, and it truly sounds like you're carrying a lot right now. Please know that whatever you're feeling, whether it's joy, sadness, frustration, or anything in between, it's completely valid, and I'm here to walk alongside you through it all. You are genuinely not alone in this journey.",
+                    "It takes so much courage and strength to even acknowledge what you're going to, and I truly commend you for that brave step. Lean on me, I'm ready to listen with an open heart and without any judgment whatsoever. How can I best support you and offer comfort in this very moment?",
+                    "Remember, even the smallest step forward, or simply reaching out, is still a powerful step in itself. I deeply believe in your inner strength and resilience, and we'll navigate this together, one gentle and empathetic moment at a time. Please, feel free to tell me more, if you feel comfortable sharing."
+                ],
+                'Motivator': [
+                    "Alright, champion! I can absolutely sense the incredible spark within you, even if it feels a bit dim or hidden right now. Remember, every truly great journey starts with that very first, courageous thought or action. What's one tiny, powerful action we can celebrate together today to get that momentum building?",
+                    "Hey, don't let those feelings hold you back for too long! You've got an incredible, untapped power within you just waiting to be unleashed! Let's find that inner fire and get it roaring to life! What's a super achievable micro-goal we can aim for right now that will make you feel a burst of accomplishment?",
+                    "Fantastic! That's the spirit I love to see! Even on the toughest days, finding that little glimmer of possibility or making a small effort is a monumental win. What's one positive thought or empowering idea you can hold onto today to keep that amazing momentum going and remind yourself of how capable you truly are?"
+                ],
+                'Chill Guru': [
+                    "Welcome, seeker of serenity. In this quiet space we share, let us simply observe what arises within your inner world. There is no need to grasp, to push, or to force any outcome, only to be present with the natural unfolding of your thoughts and feelings. What do you find yourself noticing in this very moment?",
+                    "The human mind can often be like a restless river, constantly flowing with thoughts and emotions. Perhaps we can find a calm, quiet bank to sit upon and simply watch the currents of thought flow by without attachment. What deeper insights might this gentle, non-judgmental observation bring forth for you today?",
+                    "Consider, if you will, the profound stillness that underlies all movement and all experience. Even in moments of unease or turbulence, there is an unchanging core of calm and wisdom within you. How might you connect with that inner sanctuary, even for just a few breaths, to find your grounding?"
+                ]
+            };
+
+            // Event listener for sending user messages (via click)
+            sendButton.addEventListener('click', async () => {
+                const userPrompt = userPromptTextarea.value.trim(); // Get and trim user input
+                if (!userPrompt) return; // Prevent sending empty messages
+
+                // Stop any ongoing voice input or speech output before processing a new text message
+                if (isRecording) recognition.stop();
+                if (isRecordingForEcho) recognitionEcho.stop();
+
+                addChatMessage(userPrompt, 'user'); // Add user's message to chat display
+                userPromptTextarea.value = ''; // Clear the input field
+                isLoadingAi = true; // Set AI loading state
+                updateButtonStates(); // Update UI buttons (e.g., disable send)
+
+                // Retrieve the specific prompt instructions for the currently selected personality
+                const currentPersonalityPrompt = chatPrompts[selectedPersonality];
+
+                // Combine the personality prompt with the user's message for the AI model
+                const fullPromptForAI = `${currentPersonalityPrompt}\n\nUser says: "${userPrompt}"`;
+
+                // Construct the payload for the Gemini API request
+                const payload = {
+                    contents: [{ role: "user", parts: [{ text: fullPromptForAI }] }]
+                };
+
+                // Check if API key is configured
+                if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY) {
+                    console.error("Gemini API Key is not set. Using fallback responses.");
+                    // Remove typing indicator if it exists
+                    chatMessages = chatMessages.filter(msg => !msg.isTypingIndicator);
+                    renderChatMessages();
+                    // Use fallback response
+                    const fallbackResponses = simulatedAiResponses[selectedPersonality] || ["I'm sorry, I couldn't generate a response at this moment. Please try again."];
+                    const randomFallback =  fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+                    addChatMessage(randomFallback, 'ai');
+                    isLoadingAi = false;
+                    updateButtonStates();
+                    return;
+                }
+
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+                // Add a "typing" indicator message to the chat while waiting for AI response
+                const aiTypingIndicator = { text: 'Echo is typing...', senderType: 'ai', isTypingIndicator: true };
+                addChatMessage(aiTypingIndicator.text, aiTypingIndicator.senderType, aiTypingIndicator.isTypingIndicator);
+
+                try {
+                    // Send the request to the Gemini API
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json(); // Parse the JSON response
+
+                    // Remove the typing indicator from the chat messages
+                    chatMessages = chatMessages.filter(msg => !msg.isTypingIndicator);
+                    renderChatMessages(); // Re-render chat to remove indicator
+
+                    // Check if the AI response is valid and contains text
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text; // Extract AI's response text
+                        addChatMessage(text, 'ai'); // Add AI's response to chat
+                        // Speak the AI's response using Eleven Labs, and reset AI state once speaking is done
+                        speakText(text, () => {
+                            isLoadingAi = false; // Reset AI loading state
+                            updateButtonStates(); // Update UI buttons
+                        });
+                    } else {
+                        // Fallback to a simulated response if Gemini API fails or returns unexpected structure
+                        console.error("Gemini API response structure unexpected or failed:", result);
+                        const fallbackResponses = simulatedAiResponses[selectedPersonality] || ["I'm sorry, I couldn't generate a response at this moment. Please try again."];
+                        const randomFallback = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+                        addChatMessage(randomFallback, 'ai'); // Add a random fallback message
+                        isLoadingAi = false; // Reset AI loading state
+                        updateButtonStates(); // Update UI buttons
+                    }
+                } catch (error) {
+                    // Handle network or other errors during API call
+                    console.error("Error calling Gemini API:", error);
+                    // Remove typing indicator on error
+                    chatMessages = chatMessages.filter(msg => !msg.isTypingIndicator);
+                    renderChatMessages();
+                    // Fallback to a simulated response on error
+                    const fallbackResponses = simulatedAiResponses[selectedPersonality] || ["It seems I'm having a little trouble connecting right now. Please give it another moment and try again!"];
+                    const randomFallback = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+                    addChatMessage(randomFallback, 'ai'); // Add a random fallback message
+                    isLoadingAi = false; // Reset AI loading state
+                    updateButtonStates(); // Update UI buttons
+                }
+            });
+
+            // Event listener for user textarea input to enable/disable send button
+            userPromptTextarea.addEventListener('input', updateButtonStates);
+
+            // Event listener for 'Enter' key press in textarea to send message (without Shift)
+            userPromptTextarea.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault(); // Prevent default new line behavior
+                    sendButton.click(); // Programmatically click the send button
+                }
+            });
+
+            // --- Initial Setup for AI Interaction Section ---
+            // Add the initial greeting from the default AI personality to the chat
+            addChatMessage(getInitialGreetingForPersonality(selectedPersonality), 'ai');
+            setupPersonalityButtons(); // Initialize the personality selection buttons
+            updateButtonStates(); // Set the initial state of all interactive buttons
+
+
+            // --- General Scroll Fade-In & How It Works Animation (Intersection Observer) Setup ---
+            const animatedElements = document.querySelectorAll('.fade-in-section, .workflow-step');
+
+            const elementObserver = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                        }
+                    });
+                },
+                {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.2 // Trigger when 20% of the element is visible
+                }
+            );
+
+            animatedElements.forEach(el => {
+                elementObserver.observe(el);
+            });
+
+
+            // --- User Comments Section Logic ---
+            const commentSliderContainer = document.getElementById('comment-slider-container');
+            const commentSlidesTrack = document.getElementById('comment-slides-track'); // This is the new inner div
+            const commentSlideDotsContainer = document.getElementById('comment-slide-dots');
+            const commentSlideDots = [];
+
+            // ***** UPDATED USER COMMENTS *****
+            const originalComments = [
+                {
+                    author: "Yash Raj",
+                    initials: "YR",
+                    review: "It's like having a diary that talks back and actually understands. I feel less alone and more confident in my own thoughts.",
+                    rating: 5,
+                    avatarColorIndex: 0 // Corresponds to --funkyOrange
+                },
+                {
+                    author: "Shreya",
+                    initials: "S",
+                    review: "I've never felt so understood. EchoWhisper became my daily safe space to vent, reflect, and feel uplifted.",
+                    rating: 5,
+                    avatarColorIndex: 1 // Corresponds to --funkyGreen
+                },
+                {
+                    author: "Himadri",
+                    initials: "H",
+                    review: "The custom personalities feature is a game-changer. I can tailor the AI to my needs, making conversations truly resonate.",
+                    rating: 5,
+                    avatarColorIndex: 2 // Corresponds to --funkyPink
+                },
+                {
+                    author: "Abhinav",
+                    initials: "A",
+                    review: "Amazing tool for journaling and getting instant, unbiased feedback. It's helped me organize my thoughts so much.",
+                    rating: 4,
+                    avatarColorIndex: 3 // Corresponds to --funkyPurple
+                },
+                {
+                    author: "Aman Kumar",
+                    initials: "AK",
+                    review: "Initially skeptical, but the empathetic responses genuinely surprised me. A great companion for daily reflections.",
+                    rating: 5,
+                    avatarColorIndex: 4 // Corresponds to --funkyBlue
+                },
+                {
+                    author: "Ankit Kumar",
+                    initials: "AK",
+                    review: "The voice input is seamless! It feels natural to just speak my mind, and the AI's responses are incredibly fluid.",
+                    rating: 5,
+                    avatarColorIndex: 5 // Corresponds to --funkyCoral
+                }
+            ];
+
+            let shuffledComments = [...originalComments]; // Start with a copy of original comments
+            let currentCommentDisplayIndex = 1; // Index in the `comment-slides-track` (1 for first real, 0 for cloned last)
+            let isAnimatingComments = false; // Flag for comment slider animation
+            let autoSlideCommentsInterval; // Interval for automated comments slide
+
+            const COMMENT_SLIDE_INTERVAL_TIME = 5000; // 5 seconds for comment auto-slide
+
+
+            // Function to generate star HTML based on rating
+            function getStarRatingHtml(rating) {
+                let stars = '';
+                for (let i = 0; i < 5; i++) {
+                    // Use a filled star emoji for rating, empty star for remaining
+                    stars += i < rating ? '★' : '☆';
+                }
+                return `<span class="star-rating">${stars}</span>`;
+            }
+
+            // Function to create and append comment cards and dots
+            function renderCommentCards() {
+                commentSlidesTrack.innerHTML = ''; // Clear existing comments
+                commentSlideDotsContainer.innerHTML = ''; // Clear existing dots
+                commentSlideDots.length = 0; // Clear dots array
+
+                // Add cloned last comment at the beginning for seamless loop
+                const clonedLastComment = shuffledComments[shuffledComments.length - 1];
+                const tempAllComments = [clonedLastComment, ...shuffledComments];
+
+                // Add cloned first comment at the end for seamless loop
+                const clonedFirstComment = shuffledComments[0];
+                tempAllComments.push(clonedFirstComment);
+
+                tempAllComments.forEach((comment, index) => {
+                    const commentCard = document.createElement('div');
+                    commentCard.classList.add('comment-card');
+
+                    commentCard.innerHTML = `
+                        <div class="flex items-center mb-2">
+                            <div class="comment-avatar bg-avatar-${comment.avatarColorIndex}">
+                                ${comment.initials}
+                            </div>
+                            <div class="ml-4 flex flex-col justify-center">
+                                <p class="comment-author-name">${comment.author}</p>
+                                <span class="verified-review-tag">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle inline-block mr-1">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                    </svg>
+                                    Verified Review
+                                </span>
+                            </div>
+                        </div>
+                        <p class="comment-text mb-4">"${comment.review}"</p>
+                        ${getStarRatingHtml(comment.rating)}
+                    `;
+                    commentSlidesTrack.appendChild(commentCard);
+                });
+
+                // Create dots for original comments
+                shuffledComments.forEach((_, index) => {
+                    const dot = document.createElement('button');
+                    dot.classList.add('dot', 'w-3', 'h-3', 'rounded-full', 'bg-gray-600', 'hover:bg-gray-400', 'transition-colors', 'duration-300');
+                    dot.dataset.commentIndex = index;
+                    dot.addEventListener('click', () => {
+                        if (isAnimatingComments) return;
+                        currentCommentDisplayIndex = index + 1; // Adjust for leading cloned slide
+                        updateCommentSlider(false);
+                        resetAutoSlideCommentsTimer();
+                    });
+                    commentSlideDots.push(dot);
+                    commentSlideDotsContainer.appendChild(dot);
+                });
+
+                updateCommentDots(); // Update dot active state initially
+            }
+
+            // Function to update active state of comment dots
+            function updateCommentDots() {
+                const numOriginalComments = shuffledComments.length;
+                let activeDotIndex = currentCommentDisplayIndex - 1; // Adjust for the leading clone
+
+                // Handle active dot for cloned slides
+                if (currentCommentDisplayIndex === 0) { // If on the cloned last slide
+                    activeDotIndex = numOriginalComments - 1;
+                } else if (currentCommentDisplayIndex === numOriginalComments + 1) { // If on the cloned first slide
+                    activeDotIndex = 0;
+                }
+
+                commentSlideDots.forEach((dot, index) => {
+                    if (index === activeDotIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+
+            /**
+             * Updates the comment slider's visual state using transform: translateX.
+             * @param {boolean} [instant=false] - If true, the transition will be instant.
+             */
+            function updateCommentSlider(instant = false) {
+                const commentCards = Array.from(commentSlidesTrack.children);
+                if (commentCards.length === 0) return;
+
+                // Dynamically get the width of a comment card including its right margin
+                // This is crucial for responsiveness as card widths can change with screen size
+                const firstCard = commentCards[0];
+                const cardWidth = firstCard.offsetWidth + parseFloat(getComputedStyle(firstCard).marginRight);
+
+                const translateXValue = -(currentCommentDisplayIndex * cardWidth);
+
+                if (!instant) {
+                    isAnimatingComments = true;
+                    commentSlidesTrack.style.transition = 'transform 0.5s ease-out';
+                    // Timeout to reset flag in case transitionend doesn't fire
+                    setTimeout(() => {
+                        isAnimatingComments = false;
+                    }, 600);
+                } else {
+                    commentSlidesTrack.style.transition = 'none';
+                    void commentSlidesTrack.offsetHeight; // Force reflow
+                    isAnimatingComments = false;
+                }
+
+                commentSlidesTrack.style.transform = `translateX(${translateXValue}px)`;
+
+                // Update active class on comment cards
+                commentCards.forEach((card, index) => {
+                    if (index === currentCommentDisplayIndex) {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
+
+                updateCommentDots(); // Update dots
+            }
+
+            // Handles the infinite loop for comments after transition ends
+            commentSlidesTrack.addEventListener('transitionend', () => {
+                const numOriginalComments = shuffledComments.length;
+
+                if (currentCommentDisplayIndex === 0) { // Moved to cloned last comment (at actual index 0)
+                    shuffleArray(shuffledComments); // Shuffle the array
+                    renderCommentCards(); // Re-render with new shuffled comments
+                    currentCommentDisplayIndex = numOriginalComments; // Snap to the last real comment
+                    updateCommentSlider(true);
+                } else if (currentCommentDisplayIndex === numOriginalComments + 1) { // Moved to cloned first comment (at actual index comments.length + 1)
+                    shuffleArray(shuffledComments); // Shuffle the array
+                    renderCommentCards(); // Re-render with new shuffled comments
+                    currentCommentDisplayIndex = 1; // Snap to the first real comment
+                    updateCommentSlider(true);
+                } else {
+                    isAnimatingComments = false; // Regular animation ended
+                }
+            });
+
+            /**
+             * Navigates the comment slider to the previous or next slide.
+             * @param {'next'|'prev'} direction - The direction to navigate.
+             */
+            function navigateComments(direction) {
+                if (isAnimatingComments) return;
+
+                const numOriginalComments = shuffledComments.length;
+
+                if (direction === 'next') {
+                    currentCommentDisplayIndex++;
+                } else { // 'prev'
+                    currentCommentDisplayIndex--;
+                }
+                updateCommentSlider(false);
+            }
+
+            /**
+             * Starts or restarts the automatic slide show for comments.
+             */
+            function startAutoSlideComments() {
+                clearInterval(autoSlideCommentsInterval); // Clear any existing interval
+                autoSlideCommentsInterval = setInterval(() => {
+                    navigateComments('next');
+                }, COMMENT_SLIDE_INTERVAL_TIME);
+            }
+
+            /**
+             * Resets the auto-slide timer for comments.
+             */
+            function resetAutoSlideCommentsTimer() {
+                startAutoSlideComments();
+            }
+
+            // --- Touch Events for Comment Slider ---
+            let commentTouchStartX = 0;
+            let commentCurrentTranslateX = 0; // Store current transform value for drag
+            const commentSwipeThreshold = 50;
+
+            commentSliderContainer.addEventListener('touchstart', (e) => {
+                if (isAnimatingComments) return; // Prevent interference during animation
+                commentSlidesTrack.style.transition = 'none'; // Disable transition during drag
+                commentTouchStartX = e.touches[0].clientX;
+                // Parse current translateX from style
+                const transformMatrix = new WebKitCSSMatrix(window.getComputedStyle(commentSlidesTrack).transform);
+                commentCurrentTranslateX = transformMatrix.m41;
+                resetAutoSlideCommentsTimer(); // Reset auto-slide timer on touch start
+            }, { passive: true });
+
+            commentSliderContainer.addEventListener('touchmove', (e) => {
+                if (!commentTouchStartX || isAnimatingComments) return;
+                const touchMoveX = e.touches[0].clientX;
+                const dragDistance = touchMoveX - commentTouchStartX;
+                commentSlidesTrack.style.transform = `translateX(${commentCurrentTranslateX + dragDistance}px)`;
+            }, { passive: true });
+
+            commentSliderContainer.addEventListener('touchend', (e) => {
+                if (!commentTouchStartX) return;
+                const touchEndX = e.changedTouches[0].clientX;
+                const dragDistance = touchEndX - commentTouchStartX;
+                commentTouchStartX = 0; // Reset touch start
+
+                // Re-enable transition
+                commentSlidesTrack.style.transition = 'transform 0.5s ease-out';
+
+                const commentCards = Array.from(commentSlidesTrack.children);
+                if (commentCards.length === 0) return;
+
+                const cardWidth = commentCards[0].offsetWidth + parseFloat(getComputedStyle(commentCards[0]).marginRight);
+                const currentOffset = -parseFloat(commentSlidesTrack.style.transform.replace('translateX(', '').replace('px)', ''));
+
+                let closestIndex = Math.round(currentOffset / cardWidth);
+
+                if (closestIndex >= commentCards.length - 1) {
+                    closestIndex = commentCards.length - 1; // Clamp to the last element (including clone)
+                } else if (closestIndex <= 0) {
+                    closestIndex = 0; // Clamp to the first element (including clone)
+                }
+
+                currentCommentDisplayIndex = closestIndex;
+                updateCommentSlider(false); // Snap to the closest card
+                resetAutoSlideCommentsTimer();
+            });
+
+
+            // --- Mouse Drag Events for Comment Slider ---
+            let isCommentDragging = false;
+            let commentDragStartX = 0;
+            let commentInitialTranslateX = 0;
+
+            commentSliderContainer.addEventListener('mousedown', (e) => {
+                isCommentDragging = true;
+                commentSlidesTrack.style.transition = 'none'; // Disable transition during drag
+                commentDragStartX = e.clientX;
+                const transformMatrix = new WebKitCSSMatrix(window.getComputedStyle(commentSlidesTrack).transform);
+                commentInitialTranslateX = transformMatrix.m41;
+                commentSliderContainer.style.cursor = 'grabbing';
+                e.preventDefault(); // Prevent text selection
+                resetAutoSlideCommentsTimer(); // Reset auto-slide timer on mouse down
+            });
+
+            commentSliderContainer.addEventListener('mousemove', (e) => {
+                if (!isCommentDragging) return;
+                e.preventDefault();
+                const dragDistance = e.clientX - commentDragStartX;
+                commentSlidesTrack.style.transform = `translateX(${commentInitialTranslateX + dragDistance}px)`;
+            });
+
+            commentSliderContainer.addEventListener('mouseup', () => {
+                if (!isCommentDragging) return;
+                isCommentDragging = false;
+                commentSliderContainer.style.cursor = 'grab';
+
+                // Re-enable transition
+                commentSlidesTrack.style.transition = 'transform 0.5s ease-out';
+
+                const commentCards = Array.from(commentSlidesTrack.children);
+                if (commentCards.length === 0) return;
+
+                const cardWidth = commentCards[0].offsetWidth + parseFloat(getComputedStyle(commentCards[0]).marginRight);
+                const currentOffset = -parseFloat(commentSlidesTrack.style.transform.replace('translateX(', '').replace('px)', ''));
+
+                let closestIndex = Math.round(currentOffset / cardWidth);
+
+                if (closestIndex >= commentCards.length - 1) {
+                    closestIndex = commentCards.length - 1; // Clamp to the last element (including clone)
+                } else if (closestIndex <= 0) {
+                    closestIndex = 0; // Clamp to the first element (including clone)
+                }
+
+                currentCommentDisplayIndex = closestIndex;
+                updateCommentSlider(false); // Snap to the closest card
+                resetAutoSlideCommentsTimer();
+            });
+
+            commentSliderContainer.addEventListener('mouseleave', () => {
+                if (isCommentDragging) {
+                    // Simulate mouseup if dragging ends by leaving the container
+                    commentSliderContainer.dispatchEvent(new MouseEvent('mouseup'));
+                }
+            });
+
+            // Initial render and setup for comments slider
+            renderCommentCards();
+            updateCommentSlider(true); // Initial positioning
+            startAutoSlideComments(); // Start automated sliding
+            window.addEventListener('resize', debounce(() => {
+                updateCommentSlider(true); // Re-position comments on resize
+            }, 250));
+
+
+        });
+
+        // --- Site Opening Animation Logic ---
+        // This script block handles the initial loading overlay animation when the website first loads.
+        window.addEventListener('load', () => {
+            const siteOpeningOverlay = document.getElementById('site-opening-overlay'); // Get the main overlay element
+            const overlayLogo = document.getElementById('overlay-logo'); // Get the EchoWhisper logo text element
+            const starsContainer = document.querySelector('.stars'); // Get the twinkling stars background container
+            const loadingDotsText = document.getElementById('loading-dots-text'); // Get the "Loading..." text element
+
+            // Check if all necessary elements are present in the DOM before proceeding
+            if (siteOpeningOverlay && overlayLogo && starsContainer && loadingDotsText) {
+                // 1. Reveal the twinkling stars immediately.
+                // The 'is-visible' class triggers a CSS transition to fade them in.
+                starsContainer.classList.add('is-visible');
+
+                // 2. After a short delay, fade in and type the "ECHOWHISPER" logo.
+                setTimeout(() => {
+                    overlayLogo.classList.add('is-visible'); // Make the logo element visible for the typing effect
+                    // Call the simulateTyping utility function to type out the logo text
+                    simulateTyping(overlayLogo, 'ECHOWHISPER', 100, () => {
+                        // This callback function executes after "ECHOWHISPER" has been fully typed.
+
+                        // 3. After the logo is typed, reveal and start the "Loading..." dots animation.
+                        loadingDotsText.classList.add('is-visible'); // Make the loading text visible
+                        let dotCount = 0; // Initialize dot counter
+                        const maxDots = 3; // Maximum number of dots for "..."
+                        // Set an interval to animate the loading dots (e.g., Loading., Loading.., Loading...)
+                        let loadingInterval = setInterval(() => {
+                            let dots = '.'.repeat(dotCount % (maxDots + 1)); // Cycle through 0, 1, 2, 3 dots
+                            loadingDotsText.textContent = `Loading ${dots}`; // Update text content
+                            dotCount++; // Increment dot count
+                        }, 300); // Speed of the dot animation (300ms per dot change)
+
+                        // 4. After a total specified duration, fade out and remove the entire overlay.
+                        const totalLoadingAnimationDuration = 3000; // Total time for the loading sequence before fading out (3 seconds)
+                        setTimeout(() => {
+                            clearInterval(loadingInterval); // Stop the loading dots animation
+                            siteOpeningOverlay.classList.add('is-active'); // Add 'is-active' to trigger the overlay's fade-out CSS transition
+                            // Add an event listener to completely remove the overlay from the DOM once its fade-out transition is complete.
+                            siteOpeningOverlay.addEventListener('transitionend', () => {
+                                siteOpeningOverlay.remove(); // Remove the overlay element from the document body
+                            }, { once: true }); // Ensure this event listener only runs once
+                        }, totalLoadingAnimationDuration);
+                    });
+                }, 500); // Delay before "ECHOWHISPER" starts typing (500ms)
+            }
+        });
+    </script>
+</body>
+
+</html>

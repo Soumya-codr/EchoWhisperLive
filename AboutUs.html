@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - EchoWhisper</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Space Mono for a cyberpunk feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom colors as CSS variables for easier use */
+        :root {
+            --funkyBlue: #00e5ff;     /* Electric Blue */
+            --funkyPurple: #8A2BE2;   /* Synth Purple */
+            --funkyPink: #FF00FF;     /* Neon Pink */
+            --funkyOrange: #FFA500;   /* Bright Orange */
+            --funkyGreen: #00FF00;    /* Cyber Green */
+            --funkyMint: #4ecdc4;
+            --funkyCoral: #ff7675;
+            --funkyYellow: #ffd23f;
+        }
+
+        /* Global CSS for Nothing Design Feel - Applied to overall body/structure */
+        body {
+            font-family: 'Space Mono', monospace;
+            background-color: #0d0d0d; /* Dark background */
+            color: #f0f0f0; /* Brighter white for general text */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Nav - Keep subtle glassmorphism for "Nothing Design" website feel */
+        .glass-effect-nav {
+            backdrop-filter: blur(5px) saturate(120%);
+            -webkit-backdrop-filter: blur(5px) saturate(120%);
+            background-color: rgba(255, 255, 255, 0.03); /* Very low opacity */
+            border: 1px solid rgba(255, 255, 255, 0.05); /* Almost invisible border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Very subtle shadow */
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-effect-nav:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Text shadow for logo text - Reverted to stronger cyberpunk glow */
+        .logo-text-shadow {
+          text-shadow: 0px 0px 15px #fff,
+                       0px 0px 30px var(--funkyBlue),
+                       0px 0px 45px var(--funkyPink);
+        }
+
+        /* Scroll Fade-In/Out Animation Styles */
+        .fade-in-section {
+          opacity: 0;
+          transform: translateY(10px);
+          transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* Apply Space Mono font to specific text elements */
+        .font-space-mono {
+          font-family: 'Space Mono', monospace;
+        }
+
+        /* Footer specific styles for dynamism */
+        .footer-link-hover:hover {
+            color: var(--funkyMint); /* Highlight color on hover */
+            transform: translateY(-2px); /* Slight lift */
+            text-shadow: 0 0 8px var(--funkyMint); /* Subtle glow */
+            transition: all 0.3s ease;
+        }
+
+        .social-icon-hover:hover {
+            transform: scale(1.15) rotate(5deg); /* Scale up and slight rotation */
+            color: var(--funkyBlue); /* Change icon color */
+            box-shadow: 0 0 15px var(--funkyBlue)50; /* Add a glowing shadow */
+            border-color: var(--funkyBlue); /* Change border color */
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Text Shadow Pulse on Hover - softer, more subtle */
+        .hover\:text-shadow-pulse:hover {
+            text-shadow: 0px 0px 10px var(--funkyPink), 0px 0px 20px var(--funkyBlue);
+        }
+
+        /* "Unlock Your Voice" button shine effect */
+        .shine-button {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .shine-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 100%);
+            transform: skewX(-20deg);
+            transition: left 0.5s ease-in-out;
+            z-index: -1;
+        }
+
+        .shine-button:hover::before {
+            left: 125%;
+        }
+
+        /* --- About Us Section Specific Styles (Matching Main Page Vibe) --- */
+
+        /* Main content wrapper for About Us section */
+        .about-us-content-wrapper {
+            border: 2px solid var(--funkyBlue); /* Electric Blue border - initial state */
+            box-shadow: 0 0 15px var(--funkyBlue),
+                        0 0 30px rgba(0, 240, 255, 0.7), /* Initial shadow opacity */
+                        0 0 45px rgba(0, 240, 255, 0.5); /* Initial shadow opacity */
+            background-color: rgba(13, 13, 13, 0.8); /* More prominent background */
+            animation: neon-pulse 8s infinite alternate ease-in-out; /* Apply neon pulse animation */
+        }
+
+        /* Keyframes for neon pulse animation */
+        @keyframes neon-pulse {
+            0% {
+                border-color: var(--funkyBlue);
+                box-shadow: 0 0 15px var(--funkyBlue),
+                            0 0 30px rgba(0, 240, 255, 0.7),
+                            0 0 45px rgba(0, 240, 255, 0.5);
+            }
+            25% {
+                border-color: var(--funkyPink);
+                box-shadow: 0 0 15px var(--funkyPink),
+                            0 0 30px rgba(255, 0, 255, 0.7),
+                            0 0 45px rgba(255, 0, 255, 0.5);
+            }
+            50% {
+                border-color: var(--funkyGreen);
+                box-shadow: 0 0 15px var(--funkyGreen),
+                            0 0 30px rgba(0, 255, 0, 0.7),
+                            0 0 45px rgba(0, 255, 0, 0.5);
+            }
+            75% {
+                border-color: var(--funkyOrange);
+                box-shadow: 0 0 15px var(--funkyOrange),
+                            0 0 30px rgba(255, 165, 0, 0.7),
+                            0 0 45px rgba(255, 165, 0, 0.5);
+            }
+            100% {
+                border-color: var(--funkyBlue); /* Return to start color */
+                box-shadow: 0 0 15px var(--funkyBlue),
+                            0 0 30px rgba(0, 240, 255, 0.7),
+                            0 0 45px rgba(0, 240, 255, 0.5);
+            }
+        }
+
+
+        /* Inner cards (Empathy First, Unwavering Privacy) - Mimicking feature-card */
+        .about-us-card {
+            position: relative;
+            padding: 2rem; /* p-8 */
+            border-radius: 1.5rem; /* rounded-3xl */
+            background-color: rgba(31, 41, 55, 0.7); /* bg-gray-800/70 */
+            backdrop-filter: blur(5px); /* backdrop-blur-sm */
+            text-align: left;
+            overflow: hidden;
+            border: 1px solid rgba(75, 85, 99, 0.7); /* Increased border strength */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* More visible shadow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .about-us-card:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4), 0 0 20px var(--funkyBlue)50; /* Stronger hover shadow/glow */
+            border-color: var(--funkyBlue); /* Hover border color */
+        }
+
+        /* Gradient overlay for inner cards */
+        .about-us-card .card-gradient-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 1.5rem; /* rounded-3xl */
+            opacity: 0.3; /* Default opacity */
+            transition: opacity 0.3s ease;
+        }
+        .about-us-card:hover .card-gradient-overlay {
+            opacity: 0.5; /* Increased on hover */
+        }
+
+        /* Get Started Button on About Us Page - Match pulse-grow-button */
+        .pulse-grow-button-about:hover {
+            animation: pulse-grow 0.8s ease-out forwards;
+        }
+        @keyframes pulse-grow {
+            0% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 229, 255, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 0 25px rgba(0, 229, 255, 0.7), 0 0 40px rgba(138, 43, 226, 0.7); }
+            100% { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 229, 255, 0.5), 0 0 30px rgba(138, 43, 226, 0.5); }
+        }
+
+        /* Custom classes for gradient text to ensure they work */
+        .gradient-text-story {
+            background-image: linear-gradient(to right, var(--funkyMint), var(--funkyBlue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent; /* Fallback for browsers not supporting -webkit-text-fill-color */
+            display: inline-block; /* Essential for background-clip: text to work reliably */
+        }
+
+        .gradient-text-vision {
+            background-image: linear-gradient(to right, var(--funkyOrange), var(--funkyYellow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent; /* Fallback for browsers not supporting -webkit-text-fill-color */
+            display: inline-block; /* Essential for background-clip: text to work reliably */
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-white">
+    <!-- Fixed background for a subtle effect -->
+    <div class="fixed inset-0 bg-gray-950"></div>
+    <!-- Main content container -->
+    <div class="relative z-10 transition-colors duration-300">
+
+        <!-- Navbar Section -->
+        <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 rounded-full flex items-center justify-between z-50 transition-all duration-500 glass-effect-nav">
+            <div class="flex items-center space-x-2 group cursor-pointer">
+                <div class="relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle h-8 w-8 text-funky-pink group-hover:text-funky-orange transition-all duration-300">
+                        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+                    </svg>
+                    <div class="absolute inset-0" style="background-color: var(--funkyPink)10; border-radius: 9999px; filter: blur(10px); transition: background-color 0.3s ease;"></div>
+                </div>
+                <a href="FrontPage.html" style="text-decoration: none; color: inherit;">
+                    <span class="text-xl font-bold text-white logo-text-shadow">EchoWhisper</span>
+                </a>
+            </div>
+            <div class="flex items-center flex-shrink-0">
+                <button class="group bg-gradient-to-r from-funky-blue to-funky-purple/50 text-white px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 hover:scale-105 shadow-md shine-button" style="box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">
+                    <span>Unlock Your Voice</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-key-round h-4 w-4 transition-transform duration-200">
+                        <path d="M2 18v3c0 .6.4 1 1 1h4v-5H2Z"/>
+                        <path d="M7 21v-3.5a2.5 2.5 0 0 1 5 0V21H7Z"/>
+                        <path d="M21 15V6a3 3 0 0 0-3-3H7.9c-.79 0-1.5.38-1.99.98L2 8"/>
+                        <path d="M18 8a2 2 0 1 1 4 0v6.5c0 .28-.22-.5-.5.5H18Z"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- About Us Content Section -->
+        <section id="about-us-section" class="pt-24 pb-16 relative overflow-hidden text-center">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 rounded-3xl about-us-content-wrapper">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 fade-in-section" style="transition-delay: 0.1s;">
+                    Our <span class="gradient-text-story">Story</span>
+                </h1>
+                <p class="text-lg text-gray-300 mb-8 leading-relaxed max-w-2xl mx-auto fade-in-section" style="transition-delay: 0.2s;">
+                    EchoWhisper was born from a simple yet powerful idea: in the digital age, where instant connections are abundant, genuine empathy and understanding are often rare. We aimed to create a platform that not only listens but truly comprehends, providing a non-judgmental space where anyone can express their thoughts and feelings without fear. This is our journey to create a friend for all who need a listening ear and a supportive voice. We believe everyone deserves to feel heard and understood, and EchoWhisper is here to bridge that gap.
+                </p>
+
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 mt-12 fade-in-section" style="transition-delay: 0.3s;">
+                    Our <span class="gradient-text-vision">Vision</span>
+                </h2>
+                <p class="text-lg text-gray-300 mb-8 leading-relaxed max-w-2xl mx-auto fade-in-section" style="transition-delay: 0.4s;">
+                    Our vision is to build a future where AI-powered companionship and emotional well-being go hand-in-hand. Through EchoWhisper, we aspire to empower individuals to explore their emotional journeys, manage stress, and develop resilience. We want to foster an ecosystem where AI is not just a tool, but a trusted confidant guiding you on a path of personal growth and self-discovery. Our goal is to make AI a natural extension of human connection, making mental wellness support accessible and intuitive for everyone, everywhere.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                    <!-- Empathy First Card -->
+                    <div class="about-us-card fade-in-section" style="transition-delay: 0.5s;">
+                        <div class="card-gradient-overlay" style="background-image: linear-gradient(to bottom right, var(--funkyPink), var(--funkyCoral));"></div>
+                        <div class="relative z-10">
+                            <div class="text-funky-pink mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart mx-auto"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Empathy First</h3>
+                            <p class="text-gray-400 text-base">We prioritize understanding and compassionate responses.</p>
+                        </div>
+                    </div>
+                    <!-- Unwavering Privacy Card -->
+                    <div class="about-us-card fade-in-section" style="transition-delay: 0.6s;">
+                        <div class="card-gradient-overlay" style="background-image: linear-gradient(to bottom right, var(--funkyGreen), var(--funkyMint));"></div>
+                        <div class="relative z-10">
+                            <div class="text-funky-green mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-half mx-auto"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path><path d="M12 22V3"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-white mb-2">Unwavering Privacy</h3>
+                            <p class="text-gray-400 text-base">Your conversations are always secure and confidential.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center fade-in-section" style="transition-delay: 0.7s;">
+                    <a href="#" class="group bg-gradient-to-r from-funky-purple to-funky-blue text-white px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-funky-blue/70 inline-flex items-center space-x-2 pulse-grow-button-about">
+                        <span>Get Started with EchoWhisper</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right h-6 w-6 transition-transform duration-200">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Section (Copied from main app for consistency) -->
+        <footer class="py-16 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto py-8 rounded-3xl backdrop-blur-md">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="flex items-center space-x-2 mb-6 md:mb-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle h-8 w-8 text-funky-purple">
+                            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+                        </svg>
+                        <span class="text-2xl font-bold text-gray-200">EchoWhisper</span>
+                    </div>
+                    <div class="flex flex-wrap justify-center md:justify-start space-x-8 mb-6 md:mb-0 text-base">
+                        <a href="AboutUs.html" class="text-gray-400 hover:text-white transition-colors duration-200 footer-link-hover">About</a>
+                        <a href="ContactUs.html" class="text-gray-400 hover:text-white transition-colors duration-200 footer-link-hover">Contact</a>
+                        <a href="PrivacyPolicy.html" class="text-gray-400 hover:text-white transition-colors duration-200 footer-link-hover">Privacy Policy</a>
+                        <a href="TermsOfService.html" class="text-gray-400 hover:text-white transition-colors duration-200 footer-link-hover">Terms of Service</a>
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="https://x.com/EchoWhisperOffi?t=TMkZTuUP8McuLEfW5yECYQ&s=33" aria-label="Twitter" class="p-2 rounded-md bg-gray-800 border border-gray-800 social-icon-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-twitter h-6 w-6 text-gray-400">
+                                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+                            </svg>
+                        </a>
+                        <a href="https://www.instagram.com/echowhisper_official?igsh=cjI2ZnNhdGxhM3Mx" aria-label="Instagram" class="p-2 rounded-md bg-gray-800 border border-gray-800 social-icon-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram h-6 w-6 text-gray-400">
+                                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="LinkedIn" class="p-2 rounded-md bg-gray-800 border border-gray-800 social-icon-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin h-6 w-6 text-gray-400">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                <rect width="4" height="12" x="2" y="9"></rect>
+                                <circle cx="4" cy="4" r="2"></circle>
+                            </svg>
+                        </a>
+                        <a href="echowhisperofficial@gmail.com" aria-label="Email" class="p-2 rounded-md bg-gray-800 border border-gray-800 social-icon-hover">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail h-6 w-6 text-gray-400">
+                                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="border-t border-white/10 mt-10 pt-6 text-center">
+                    <p class="text-gray-500 text-sm">© 2025 EchoWhisper. All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const aboutUsContent = document.querySelectorAll('#about-us-section .fade-in-section');
+            aboutUsContent.forEach(element => {
+                element.classList.add('is-visible');
+            });
+        });
+    </script>
+</body>
+</html>

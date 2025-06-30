@@ -1,0 +1,14 @@
+{
+  "name": "html-static-site",
+  "version": "1.0.0",
+  "description": "Static HTML site with Node.js server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "mkdir -p build && cp *.html build/ && cp build/FrontPage.html build/index.html && echo 'Build completed successfully'"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
