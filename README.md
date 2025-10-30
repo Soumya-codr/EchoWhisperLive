@@ -68,11 +68,12 @@ EchoWhisperer is designed as a supportive AI companion, offering a multi-modal a
 This project was a collaborative effort by me and four other dedicated teammates. We poured immense effort into bringing this vision to reality!
 
 <p align="center">
-  <a href="[Your GitHub Profile Link]"><img src="[Your Profile Image URL]" width="60px" alt="Your Name"></a>
-  <a href="[Teammate 1 GitHub Profile Link]"><img src="[Teammate 1 Profile Image URL]" width="60px" alt="Teammate 1 Name"></a>
-  <a href="[Teammate 2 GitHub Profile Link]"><img src="[Teammate 2 Profile Image URL]" width="60px" alt="Teammate 2 Name"></a>
-  <a href="[Teammate 3 GitHub Profile Link]"><img src="[Teammate 3 Profile Image URL]" width="60px" alt="Teammate 3 Name"></a>
-  <a href="[Teammate 4 GitHub Profile Link]"><img src="[Teammate 4 Profile Image URL]" width="60px" alt="Teammate 4 Name"></a>
+  <a href="https://github.com/Harsh-shrivastav"><img src="https://i.ibb.co/FqxfvYFT/IMG-20250624-014915-1080-x-1920-pixel.jpg" width="60px" alt="Harsh"></a>
+  <a href="https://github.com/Amartya989870xxxx/"><img src="https://i.ibb.co/mC5Tr6Mg/IMG-20250624-014530-1080-x-1920-pixel.jpg" width="60px" alt="Amartya Majumder"></a>
+  <a href="https://github.com/arshadali-coder"><img src="https://i.ibb.co/Q7dZJFyn/Snapchat-2031716389.jpg" width="60px" alt="Arshad Ali"></a>
+  <a href="https://github.com/Soumya-codr"><img src="https://i.ibb.co/9k6CN3Cy/IMG-20250622-230959-1080-x-1920-pixel.jpg" width="60px" alt="Soumya Sagar"></a>
+  <a href="https://github.com/CR4ZED"><img src="https://i.ibb.co/bjJpMDTv/IMG-20250622-231931-1080-x-1920-pixel.png" width="60px" alt="Ankush Jha"></a>
+  <a href="Not available"><img src="https://i.ibb.co/hwy2P0P/IMG-20250624-015158-1080-x-1920-pixel.jpg" width="60px" alt="Priyanshu"></a>
 </p>
 
 <h3 align="center">Thanks for checking out our project!</h3>
